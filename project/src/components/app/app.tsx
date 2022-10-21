@@ -1,5 +1,7 @@
+import StartScreen from '../../pages/start-screen/start-screen';
+
 function App(): JSX.Element {
-  return <p>Hello, world!</p>;
+  return <StartScreen />;
 }
 
 export default App;
