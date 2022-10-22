@@ -1,7 +1,11 @@
 import PlaceCard from '../../components/place-card/place-card';
 import { CARD_QTY_ON_PAGE } from '../../const';
 
-const StartScreen = (): JSX.Element => (
+type StartScreenProp = {
+  placeCount: number;
+};
+
+const StartScreen = ({ placeCount }: StartScreenProp): JSX.Element => (
   <div className="page page--gray page--main">
     <header className="header">
       <div className="container">
@@ -74,7 +78,7 @@ const StartScreen = (): JSX.Element => (
         <div className="cities__places-container container">
           <section className="cities__places places">
             <h2 className="visually-hidden">Places</h2>
-            <b className="places__found">312 places to stay in Amsterdam</b>
+            <b className="places__found">{placeCount} places to stay in Amsterdam</b>
             <form className="places__sorting" action="#" method="get">
               <span className="places__sorting-caption">Sort by</span>
               <span className="places__sorting-type" tabIndex={0}>
@@ -92,7 +96,7 @@ const StartScreen = (): JSX.Element => (
             </form>
             <div className="cities__places-list places__list tabs__content">
 
-              {Array.from({length: CARD_QTY_ON_PAGE}, () => <PlaceCard key={'card'} />)}
+              {Array.from({length: CARD_QTY_ON_PAGE}, (_, index) => <PlaceCard key={index + 1} />)}
 
             </div>
           </section>

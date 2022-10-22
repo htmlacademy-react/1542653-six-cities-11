@@ -1,7 +1,11 @@
 import StartScreen from '../../pages/start-screen/start-screen';
 
-function App(): JSX.Element {
-  return <StartScreen />;
+type AppProp = {
+  placeCount: number;
+}
+
+function App({ placeCount }: AppProp): JSX.Element {
+  return <StartScreen placeCount={placeCount}/>;
 }
 
 export default App;
