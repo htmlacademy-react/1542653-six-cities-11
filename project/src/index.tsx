@@ -6,8 +6,12 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
 );
 
+const Settings = {
+  placeCount: 100,
+} as const;
+
 root.render(
   <React.StrictMode>
-    <App />
+    <App placeCount={Settings.placeCount}/>
   </React.StrictMode>,
 );
