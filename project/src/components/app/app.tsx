@@ -7,12 +7,14 @@ import FavoritesScreen from '../../pages/favorites-screen/favorites-screen';
 import RoomScreen from '../../pages/room-screen/room-screen';
 import UnexistScreen from '../../pages/unexist-screen/unexist-screen';
 import PrivateRoute from '../PrivateRoute/PrivateRoute';
+import { Offer } from '../../types/offers-type';
 
 type AppProp = {
   placeCount: number;
+  offers: Offer[];
 }
 
-function App({ placeCount }: AppProp): JSX.Element {
+function App({ placeCount, offers }: AppProp): JSX.Element {
   return (
     <HelmetProvider>
       <BrowserRouter>
