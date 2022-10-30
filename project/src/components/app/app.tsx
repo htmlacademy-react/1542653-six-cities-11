@@ -19,11 +19,11 @@ function App({ placeCount, offers }: AppProp): JSX.Element {
     <HelmetProvider>
       <BrowserRouter>
         <Routes>
-          <Route path={AppRoute.Main} element={<StartScreen placeCount={placeCount} />} />
+          <Route path={AppRoute.Main} element={<StartScreen offers={offers} placeCount={placeCount} />} />
           <Route path={AppRoute.Login} element={<AuthScreen />} />
           <Route path={AppRoute.Favorites} element={
-            <PrivateRoute userAuthStatus={UserAuthStatus.Unknown}>
-              <FavoritesScreen />
+            <PrivateRoute userAuthStatus={UserAuthStatus.Auth}>
+              <FavoritesScreen offers={offers} />
             </PrivateRoute>
           }
           />
