@@ -1,14 +1,15 @@
 import { Helmet } from 'react-helmet-async';
 import PageHeader from '../../components/page-header/page-header';
 import PageNavigation from '../../components/page-navigation/page-navigation';
-import PlaceCard from '../../components/place-card/place-card';
-import { CARD_QTY_ON_PAGE } from '../../const';
+import OfferList from '../../components/offer-list/offer-list';
+import { Offer } from '../../types/offers-type';
 
 type StartScreenProp = {
   placeCount: number;
+  offers: Offer[];
 };
 
-const StartScreen = ({ placeCount }: StartScreenProp): JSX.Element => (
+const StartScreen = ({ placeCount, offers }: StartScreenProp): JSX.Element => (
   <div className="page page--gray page--main">
     <Helmet>
       <title>6 cities. Main page</title>
@@ -78,7 +79,7 @@ const StartScreen = ({ placeCount }: StartScreenProp): JSX.Element => (
             </form>
             <div className="cities__places-list places__list tabs__content">
 
-              {Array.from({length: CARD_QTY_ON_PAGE}, (_, index) => <PlaceCard key={index + 1} />)}
+              {<OfferList offers={offers} />}
 
             </div>
           </section>
