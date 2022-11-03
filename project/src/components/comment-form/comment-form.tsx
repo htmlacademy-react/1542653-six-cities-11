@@ -3,14 +3,16 @@ import CommentPlaceRating from '../comment-place-rating/comment-place-rating';
 
 const CommentForm = (): JSX.Element => {
   const [commentText, setCommentText] = useState('');
+  const [, setRating] = useState(1);
 
   const changeTextCommentHandler = (evt: ChangeEvent<HTMLTextAreaElement>) => setCommentText(evt.target.value);
 
+  const changeRating = (evt: ChangeEvent<HTMLInputElement>) => setRating(Number(evt.target.value));
   return (
     <form className="reviews__form form" action="#" method="post">
       <label className="reviews__label form__label" htmlFor="review">Your review</label>
 
-      <CommentPlaceRating />
+      <CommentPlaceRating onChangeRatingHandler={changeRating} />
 
       <textarea
         onChange={changeTextCommentHandler}

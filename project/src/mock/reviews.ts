@@ -8,7 +8,7 @@ const reviews:Review[] = [
     rating: 4,
     user: {
       id: 1,
-      avatarUrl: 'img/1.png',
+      avatarUrl: 'img/avatar-max.jpg',
       isPro: false,
       name: 'Oliver',
     },

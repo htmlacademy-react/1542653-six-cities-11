@@ -16,12 +16,17 @@ type PlaceCardProp = {
   type: string;
 };
 
+type ActiveCard = {
+  id: number;
+  isActive: boolean;
+}
+
 const PlaceCard = ({id, isMainScreen, price, rating, isPremium, isFavorite, previewImage, title, type }: PlaceCardProp): JSX.Element => {
-  const [isActive, setActive] = useState(false);
+  const [{isActive}, setActive] = useState<ActiveCard>({id, isActive: false});
 
-  const handleMouseEventEnter = () => setActive(true);
+  const handleMouseEventEnter = () => setActive({id, isActive: true});
 
-  const handleMouseEventLeave = () => setActive(false);
+  const handleMouseEventLeave = () => setActive({id, isActive: false});
 
   return (
     <article
