@@ -1,5 +1,8 @@
+import { Link } from 'react-router-dom';
+import { AppRoute } from '../../const';
 import PageHeader from '../../components/page-header/page-header';
 import PageNavigation from '../../components/page-navigation/page-navigation';
+import Footer from '../../components/footer/footer';
 import './unexist-screen.css';
 
 const UnexistScreen = (): JSX.Element => (
@@ -15,18 +18,15 @@ const UnexistScreen = (): JSX.Element => (
         <p className="unexist-page-message">
           Sorry, we couldn&apos;t find this page {':('}
         </p>
-        <a className="back-to-main__link" href="main.html">
+        <Link className="back-to-main__link" to={AppRoute.Main}>
           Back to main
-        </a>
+        </Link>
 
       </div>
     </main>
 
-    <footer className="footer container unexist-page__footer">
-      <a className="footer__logo-link" href="main.html">
-        <img className="footer__logo" src="img/logo.svg" alt="6 cities logo" width="64" height="33" />
-      </a>
-    </footer>
+    <Footer />
+
   </div>
 );
 

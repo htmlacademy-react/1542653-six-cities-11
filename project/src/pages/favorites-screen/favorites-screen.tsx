@@ -1,152 +1,39 @@
 import { Helmet } from 'react-helmet-async';
+import FavoriteLocationList from '../../components/favorite-location-list/favorite-location-list';
 import PageHeader from '../../components/page-header/page-header';
 import PageNavigation from '../../components/page-navigation/page-navigation';
+import FavoriteEmptyMessage from '../../components/favorites-empty-message/favorites-empty-message';
+import Footer from '../../components/footer/footer';
+import { Offer } from '../../types/offers-type';
 
-const FavoritesScreen = (): JSX.Element => (
-  <div className="page">
-    <Helmet>
-      <title>6 cities. Your favorite places</title>
-    </Helmet>
+type FavoriteScreenProp = {
+  offers: Offer[];
+};
 
-    <PageHeader>
-      <PageNavigation />
-    </PageHeader>
+const FavoritesScreen = ({ offers }: FavoriteScreenProp): JSX.Element => {
+  const isEmptyFavorite = !offers.length;
+  return (
+    <div className="page">
+      <Helmet>
+        <title>6 cities. Your favorite places</title>
+      </Helmet>
 
-    <main className="page__main page__main--favorites">
-      <div className="page__favorites-container container">
-        <section className="favorites">
-          <h1 className="favorites__title">Saved listing</h1>
-          <ul className="favorites__list">
-            <li className="favorites__locations-items">
-              <div className="favorites__locations locations locations--current">
-                <div className="locations__item">
-                  <a className="locations__item-link" href="/#">
-                    <span>Amsterdam</span>
-                  </a>
-                </div>
-              </div>
-              <div className="favorites__places">
-                <article className="favorites__card place-card">
-                  <div className="place-card__mark">
-                    <span>Premium</span>
-                  </div>
-                  <div className="favorites__image-wrapper place-card__image-wrapper">
-                    <a href="/#">
-                      <img className="place-card__image" src="img/apartment-small-03.jpg" width="150" height="110" alt="Place" />
-                    </a>
-                  </div>
-                  <div className="favorites__card-info place-card__info">
-                    <div className="place-card__price-wrapper">
-                      <div className="place-card__price">
-                        <b className="place-card__price-value">&euro;180</b>
-                        <span className="place-card__price-text">&#47;&nbsp;night</span>
-                      </div>
-                      <button className="place-card__bookmark-button place-card__bookmark-button--active button" type="button">
-                        <svg className="place-card__bookmark-icon" width="18" height="19">
-                          <use xlinkHref="#icon-bookmark"></use>
-                        </svg>
-                        <span className="visually-hidden">In bookmarks</span>
-                      </button>
-                    </div>
-                    <div className="place-card__rating rating">
-                      <div className="place-card__stars rating__stars">
-                        <span style={{width: '100%'}}></span>
-                        <span className="visually-hidden">Rating</span>
-                      </div>
-                    </div>
-                    <h2 className="place-card__name">
-                      <a href="/#">Nice, cozy, warm big bed apartment</a>
-                    </h2>
-                    <p className="place-card__type">Apartment</p>
-                  </div>
-                </article>
+      <PageHeader>
+        <PageNavigation />
+      </PageHeader>
 
-                <article className="favorites__card place-card">
-                  <div className="favorites__image-wrapper place-card__image-wrapper">
-                    <a href="/#">
-                      <img className="place-card__image" src="img/room-small.jpg" width="150" height="110" alt="Place" />
-                    </a>
-                  </div>
-                  <div className="favorites__card-info place-card__info">
-                    <div className="place-card__price-wrapper">
-                      <div className="place-card__price">
-                        <b className="place-card__price-value">&euro;80</b>
-                        <span className="place-card__price-text">&#47;&nbsp;night</span>
-                      </div>
-                      <button className="place-card__bookmark-button place-card__bookmark-button--active button" type="button">
-                        <svg className="place-card__bookmark-icon" width="18" height="19">
-                          <use xlinkHref="#icon-bookmark"></use>
-                        </svg>
-                        <span className="visually-hidden">In bookmarks</span>
-                      </button>
-                    </div>
-                    <div className="place-card__rating rating">
-                      <div className="place-card__stars rating__stars">
-                        <span style={{width: '80%'}}></span>
-                        <span className="visually-hidden">Rating</span>
-                      </div>
-                    </div>
-                    <h2 className="place-card__name">
-                      <a href="/#">Wood and stone place</a>
-                    </h2>
-                    <p className="place-card__type">Private room</p>
-                  </div>
-                </article>
-              </div>
-            </li>
+      <main className="page__main page__main--favorites">
+        <div className="page__favorites-container container">
+          <section className={`favorites ${!isEmptyFavorite ? 'favorites--empty' : ''}`}>
+            <h1 className={`${!isEmptyFavorite ? 'favorites__title' : 'visually-hidden'}`}>Saved listing</h1>
+            {!isEmptyFavorite ? <FavoriteLocationList offers={offers} /> : <FavoriteEmptyMessage />}
+          </section>
+        </div>
+      </main>
 
-            <li className="favorites__locations-items">
-              <div className="favorites__locations locations locations--current">
-                <div className="locations__item">
-                  <a className="locations__item-link" href="/#">
-                    <span>Cologne</span>
-                  </a>
-                </div>
-              </div>
-              <div className="favorites__places">
-                <article className="favorites__card place-card">
-                  <div className="favorites__image-wrapper place-card__image-wrapper">
-                    <a href="/#">
-                      <img className="place-card__image" src="img/apartment-small-04.jpg" width="150" height="110" alt="Place" />
-                    </a>
-                  </div>
-                  <div className="favorites__card-info place-card__info">
-                    <div className="place-card__price-wrapper">
-                      <div className="place-card__price">
-                        <b className="place-card__price-value">&euro;180</b>
-                        <span className="place-card__price-text">&#47;&nbsp;night</span>
-                      </div>
-                      <button className="place-card__bookmark-button place-card__bookmark-button--active button" type="button">
-                        <svg className="place-card__bookmark-icon" width="18" height="19">
-                          <use xlinkHref="#icon-bookmark"></use>
-                        </svg>
-                        <span className="visually-hidden">In bookmarks</span>
-                      </button>
-                    </div>
-                    <div className="place-card__rating rating">
-                      <div className="place-card__stars rating__stars">
-                        <span style={{width: '100%'}}></span>
-                        <span className="visually-hidden">Rating</span>
-                      </div>
-                    </div>
-                    <h2 className="place-card__name">
-                      <a href="/#">White castle</a>
-                    </h2>
-                    <p className="place-card__type">Apartment</p>
-                  </div>
-                </article>
-              </div>
-            </li>
-          </ul>
-        </section>
-      </div>
-    </main>
-    <footer className="footer container">
-      <a className="footer__logo-link" href="main.html">
-        <img className="footer__logo" src="img/logo.svg" alt="6 cities logo" width="64" height="33" />
-      </a>
-    </footer>
-  </div>
-);
+      <Footer />
+    </div>
+  );
+};
 
 export default FavoritesScreen;
