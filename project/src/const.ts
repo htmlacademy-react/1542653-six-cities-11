@@ -1,3 +1,4 @@
+import { Location } from './types/offers-type';
 const CARD_QTY_ON_PAGE = 5;
 const MAX_PLACE_RATING = 5;
 
@@ -24,10 +25,21 @@ const PlaceRating: {
   'terribly': 1
 };
 
+const AppCitiesCoordinates: {
+  [cityName: string]: Location;
+} = {
+  'Amsterdam': {
+    latitude: 52.370216,
+    longitude: 4.895168,
+    zoom: 10
+  }
+};
+
 export {
   CARD_QTY_ON_PAGE,
   MAX_PLACE_RATING,
   AppRoute,
   UserAuthStatus,
-  PlaceRating
+  PlaceRating,
+  AppCitiesCoordinates
 };
