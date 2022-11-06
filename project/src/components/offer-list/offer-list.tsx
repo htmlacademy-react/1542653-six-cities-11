@@ -3,9 +3,10 @@ import { Offer } from '../../types/offers-type';
 
 type OfferListProp = {
   offers: Offer[];
+  onSetActiveCardId: (id: number | null) => void;
 };
 
-const OfferList = ({ offers }: OfferListProp): JSX.Element => (
+const OfferList = ({ offers, onSetActiveCardId }: OfferListProp): JSX.Element => (
   <>
     {offers.map(({ id, price, rating, isFavorite, isPremium, previewImage, title, type }) => (
       <PlaceCard
@@ -19,6 +20,7 @@ const OfferList = ({ offers }: OfferListProp): JSX.Element => (
         isPremium={isPremium}
         isFavorite={isFavorite}
         previewImage={previewImage}
+        onSetActiveCardId={onSetActiveCardId}
       />
     ))}
   </>
