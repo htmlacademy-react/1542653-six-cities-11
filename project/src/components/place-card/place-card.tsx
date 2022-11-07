@@ -1,12 +1,12 @@
-import { Link } from 'react-router-dom';
-
+import cn from 'classnames';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { getPercent } from '../../util';
-
+import { AppPageName } from '../../const';
 
 type PlaceCardProp = {
   id: number;
-  isMainScreen: boolean;
+  pageName: string;
   price: number;
   rating: number;
   isFavorite: boolean;
@@ -22,7 +22,7 @@ type ActiveCard = {
   isActive: boolean;
 }
 
-const PlaceCard = ({id, isMainScreen, price, rating, isPremium, isFavorite, previewImage, title, type, onSetActiveCardId }: PlaceCardProp): JSX.Element => {
+const PlaceCard = ({id, pageName, price, rating, isPremium, isFavorite, previewImage, title, type, onSetActiveCardId }: PlaceCardProp): JSX.Element => {
   const [{isActive}, setActive] = useState<ActiveCard>({id, isActive: false});
 
   const handleMouseEventEnter = () => {
@@ -41,7 +41,11 @@ const PlaceCard = ({id, isMainScreen, price, rating, isPremium, isFavorite, prev
 
   return (
     <article
-      className={`${isMainScreen ? 'cities__card' : 'favorites__card'} place-card`}
+      className={cn(
+        'place-card',
+        {'cities__card': pageName === AppPageName.Main},
+        {'favorites__card': pageName === AppPageName.Favorites},
+        {'near-places__card': pageName === AppPageName.Room})}
       onMouseEnter={handleMouseEventEnter}
       onMouseLeave={handleMouseEventLeave}
       style={isActive ? { opacity: '0.6'} : { opacity: '1' }}
@@ -52,9 +56,20 @@ const PlaceCard = ({id, isMainScreen, price, rating, isPremium, isFavorite, prev
           <span>Premium</span>
         </div>
         : isPremium}
-      <div className={`${isMainScreen ? 'cities__image-wrapper' : 'favorites__image-wrapper'} place-card__image-wrapper`}>
+      <div className={cn(
+        'place-card__image-wrapper',
+        {'cities__image-wrapper': pageName === AppPageName.Main},
+        {'favorites__image-wrapper': pageName === AppPageName.Favorites},
+        {'near-places__image-wrapper': pageName === AppPageName.Room})}
+      >
         <Link to={`/offer/${id}`}>
-          <img className="place-card__image" src={previewImage} width={isMainScreen ? 260 : 150} height={isMainScreen ? 260 : 110} alt="Place" />
+          <img
+            className="place-card__image"
+            src={previewImage}
+            width={pageName === AppPageName.Favorites ? 150 : 260}
+            height={pageName === AppPageName.Favorites ? 150 : 200}
+            alt="Place"
+          />
         </Link>
       </div>
       <div className="place-card__info">

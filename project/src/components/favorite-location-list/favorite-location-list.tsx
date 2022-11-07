@@ -1,6 +1,7 @@
 import { Offer } from '../../types/offers-type';
 import FavoriteLocationItem from '../favorite-location-item/favorite-location-item';
 import PlaceCard from '../place-card/place-card';
+import { AppPageName } from '../../const';
 
 type FavoriteLocationListProp = {
   offers: Offer[];
@@ -24,10 +25,10 @@ const FavoriteLocationList = ({ offers }: FavoriteLocationListProp): JSX.Element
             title={title}
             price={price}
             rating={rating}
-            isMainScreen={false}
             isPremium={isPremium}
             isFavorite={isFavorite}
             previewImage={previewImage}
+            pageName={AppPageName.Favorites}
           />
         ));
         return <FavoriteLocationItem key={city} cityName={city}>{cards}</FavoriteLocationItem>;
