@@ -35,11 +35,18 @@ const AppCitiesCoordinates: {
   }
 };
 
+enum AppPageName {
+  Main = 'Main',
+  Favorites = 'Favorites',
+  Room = 'Room',
+}
+
 export {
   CARD_QTY_ON_PAGE,
   MAX_PLACE_RATING,
   AppRoute,
   UserAuthStatus,
   PlaceRating,
-  AppCitiesCoordinates
+  AppCitiesCoordinates,
+  AppPageName
 };
