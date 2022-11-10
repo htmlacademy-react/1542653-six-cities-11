@@ -4,8 +4,8 @@ import PageHeader from '../../components/page-header/page-header';
 import PageNavigation from '../../components/page-navigation/page-navigation';
 import OfferList from '../../components/offer-list/offer-list';
 import Map from '../../components/map/map';
+import { AppCitiesCoordinates, AppPageName } from '../../const';
 import { Offer } from '../../types/offers-type';
-import { AppCitiesCoordinates } from '../../const';
 
 type StartScreenProp = {
   placeCount: number;
@@ -85,7 +85,7 @@ const StartScreen = ({ placeCount, offers }: StartScreenProp): JSX.Element => {
               </form>
               <div className="cities__places-list places__list tabs__content">
 
-                {<OfferList offers={offers} onSetActiveCardId={setActivePlaceCardId}/>}
+                {<OfferList offers={offers} pageName={AppPageName.Main} onSetActiveCardId={setActivePlaceCardId}/>}
 
               </div>
             </section>
@@ -94,6 +94,7 @@ const StartScreen = ({ placeCount, offers }: StartScreenProp): JSX.Element => {
                 city={AppCitiesCoordinates['Amsterdam']}
                 points={offers.map((offer) => ({ locations: { ...offer.location }, id: offer.id }))}
                 selectedPlaceId={activePlaceCardId}
+                isMainPage
               />
             </div>
           </div>

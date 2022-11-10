@@ -3,6 +3,8 @@ import 'leaflet/dist/leaflet.css';
 import { useEffect, useRef } from 'react';
 import { Location } from '../../types/offers-type';
 import useMap from '../../hooks/useMap';
+import cn from 'classnames';
+
 
 type MapProp = {
   city: Location;
@@ -11,9 +13,10 @@ type MapProp = {
     id: number;
   }[];
   selectedPlaceId: number | null;
+  isMainPage: boolean;
 }
 
-const Map = ({ city, points, selectedPlaceId }: MapProp): JSX.Element => {
+const Map = ({ city, points, selectedPlaceId, isMainPage }: MapProp): JSX.Element => {
   const mapRef = useRef(null);
   const map = useMap(mapRef, city);
 
@@ -41,7 +44,7 @@ const Map = ({ city, points, selectedPlaceId }: MapProp): JSX.Element => {
   }, [map, points, selectedPlaceId, pin, pinActive]);
 
   return (
-    <section className="cities__map map" ref={mapRef}></section>
+    <section className={cn('map', {'cities__map': isMainPage}, {'property__map': !isMainPage})} ref={mapRef}></section>
   );
 };
 
