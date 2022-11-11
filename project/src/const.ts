@@ -35,6 +35,8 @@ const AppCitiesCoordinates: {
   }
 };
 
+const CITIES = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
+
 enum AppPageName {
   Main = 'Main',
   Favorites = 'Favorites',
@@ -44,6 +46,7 @@ enum AppPageName {
 export {
   CARD_QTY_ON_PAGE,
   MAX_PLACE_RATING,
+  CITIES,
   AppRoute,
   UserAuthStatus,
   PlaceRating,

@@ -1,8 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { Provider } from 'react-redux';
 import App from './components/app/app';
 import offers from './mock/offers';
 import reviews from './mock/reviews';
+import store from './store/store';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
@@ -14,6 +16,8 @@ const Settings = {
 
 root.render(
   <React.StrictMode>
-    <App placeCount={Settings.placeCount} reviews={reviews} offers={offers}/>
+    <Provider store={store}>
+      <App placeCount={Settings.placeCount} reviews={reviews} offers={offers}/>
+    </Provider>
   </React.StrictMode>,
 );
