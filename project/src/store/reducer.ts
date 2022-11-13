@@ -3,16 +3,20 @@ import { Offer } from '../types/offers-type';
 import {
   setCurrentCity,
   setOffers,
+  setFavoriteOffers
 } from './actions';
+import { DEFAULT_CITY } from './../const';
 
 type InitialState = {
   currentCity: string;
   offers: Offer[];
+  favorites: Offer[];
 };
 
 const initialState: InitialState = {
-  currentCity: 'Amsterdam',
+  currentCity: DEFAULT_CITY,
   offers: [],
+  favorites: [],
 };
 
 const reducer = createReducer(initialState, (builder) => {
@@ -22,6 +26,9 @@ const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(setOffers, (state, action) => {
       state.offers = action.payload.offers;
+    })
+    .addCase(setFavoriteOffers, (state, action) => {
+      state.favorites = action.payload.offers;
     });
 });
 

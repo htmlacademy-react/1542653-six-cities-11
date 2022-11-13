@@ -5,7 +5,6 @@ import { Location } from '../../types/offers-type';
 import useMap from '../../hooks/useMap';
 import cn from 'classnames';
 
-
 type MapProp = {
   city: Location;
   points: {
@@ -32,19 +31,26 @@ const Map = ({ city, points, selectedPlaceId, isMainPage }: MapProp): JSX.Elemen
     iconAnchor: [10, 15]
   });
 
+  const markerList = points.map((point) => leaflet.marker({
+    lat: point.locations.latitude,
+    lng: point.locations.longitude,
+  }, {
+    icon: selectedPlaceId === point.id ? pinActive : pin,
+  }));
+
+  const addMarkersToCard = (markers: leaflet.Marker[], mapLayer: leaflet.Map) => markers.forEach((marker) => marker.addTo(mapLayer));
+
+  const cleanMarkers = (markers: leaflet.Marker[]) => markers.forEach((marker) => marker.remove());
+
   useEffect(() => {
     if (map) {
-      points.forEach((point) => leaflet.marker({
-        lat: point.locations.latitude,
-        lng: point.locations.longitude,
-      }, {
-        icon: selectedPlaceId === point.id ? pinActive : pin,
-      }).addTo(map));
+      addMarkersToCard(markerList, map);
     }
-  }, [map, points, selectedPlaceId, pin, pinActive]);
+    return () => cleanMarkers(markerList);
+  }, [map, markerList]);
 
   return (
-    <section className={cn('map', {'cities__map': isMainPage}, {'property__map': !isMainPage})} ref={mapRef}></section>
+    <section className={cn('map', { 'cities__map': isMainPage }, { 'property__map': !isMainPage })} ref={mapRef}></section>
   );
 };
 

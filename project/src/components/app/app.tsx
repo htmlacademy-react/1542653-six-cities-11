@@ -7,25 +7,28 @@ import FavoritesScreen from '../../pages/favorites-screen/favorites-screen';
 import RoomScreen from '../../pages/room-screen/room-screen';
 import UnexistScreen from '../../pages/unexist-screen/unexist-screen';
 import PrivateRoute from '../PrivateRoute/PrivateRoute';
-import { Offer } from '../../types/offers-type';
 import { Review } from '../../types/reviews-type';
+import { useAppSelector } from '../../hooks/store';
 
 type AppProp = {
-  placeCount: number;
-  offers: Offer[];
   reviews: Review[];
 }
 
-function App({ placeCount, offers, reviews }: AppProp): JSX.Element {
+function App({ reviews }: AppProp): JSX.Element {
+  const currentCity = useAppSelector((state) => state.currentCity);
+  const offers = useAppSelector((state) => state.offers.filter((offer) => offer.city.name === currentCity));
+  const favoriteOffers = useAppSelector((state) => state.favorites);
+  const placeCount = offers.length;
+
   return (
     <HelmetProvider>
       <BrowserRouter>
         <Routes>
-          <Route path={AppRoute.Main} element={<StartScreen offers={offers} placeCount={placeCount} />} />
+          <Route path={AppRoute.Main} element={<StartScreen currentCity={currentCity} offers={offers} placeCount={placeCount} />} />
           <Route path={AppRoute.Login} element={<AuthScreen />} />
           <Route path={AppRoute.Favorites} element={
             <PrivateRoute userAuthStatus={UserAuthStatus.Auth}>
-              <FavoritesScreen offers={offers} />
+              <FavoritesScreen offers={favoriteOffers} />
             </PrivateRoute>
           }
           />
