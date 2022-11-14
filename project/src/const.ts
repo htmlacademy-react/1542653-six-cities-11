@@ -32,8 +32,12 @@ const AppCitiesCoordinates: {
     latitude: 52.370216,
     longitude: 4.895168,
     zoom: 10
-  }
+  },
 };
+
+const DEFAULT_CITY = 'Paris';
+
+const CITIES = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
 
 enum AppPageName {
   Main = 'Main',
@@ -41,12 +45,21 @@ enum AppPageName {
   Room = 'Room',
 }
 
+const PlaceCardSize = {
+  favoriteCardSize: 150,
+  mainCardWidth: 260,
+  mainCardHeight: 200
+};
+
 export {
   CARD_QTY_ON_PAGE,
   MAX_PLACE_RATING,
+  DEFAULT_CITY,
+  CITIES,
   AppRoute,
   UserAuthStatus,
   PlaceRating,
   AppCitiesCoordinates,
-  AppPageName
+  AppPageName,
+  PlaceCardSize
 };
