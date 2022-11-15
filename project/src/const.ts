@@ -39,6 +39,10 @@ const DEFAULT_CITY = 'Paris';
 
 const CITIES = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
 
+const DEFAULT_SORT_TYPE = 'Popular';
+
+const SORT_TYPES = ['Popular', 'Price: low to high', 'Price: high to low', 'Top rated first'];
+
 enum AppPageName {
   Main = 'Main',
   Favorites = 'Favorites',
@@ -56,6 +60,8 @@ export {
   MAX_PLACE_RATING,
   DEFAULT_CITY,
   CITIES,
+  DEFAULT_SORT_TYPE,
+  SORT_TYPES,
   AppRoute,
   UserAuthStatus,
   PlaceRating,
