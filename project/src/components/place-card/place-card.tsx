@@ -2,7 +2,7 @@ import cn from 'classnames';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getPercent } from '../../util';
-import { AppPageName } from '../../const';
+import { AppPageName, PlaceCardSize } from '../../const';
 
 type PlaceCardProp = {
   id: number;
@@ -66,8 +66,8 @@ const PlaceCard = ({id, pageName, price, rating, isPremium, isFavorite, previewI
           <img
             className="place-card__image"
             src={previewImage}
-            width={pageName === AppPageName.Favorites ? 150 : 260}
-            height={pageName === AppPageName.Favorites ? 150 : 200}
+            width={pageName === AppPageName.Favorites ? PlaceCardSize.favoriteCardSize : PlaceCardSize.mainCardWidth}
+            height={pageName === AppPageName.Favorites ? PlaceCardSize.favoriteCardSize : PlaceCardSize.mainCardHeight}
             alt="Place"
           />
         </Link>
