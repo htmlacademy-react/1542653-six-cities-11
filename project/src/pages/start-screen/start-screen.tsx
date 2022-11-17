@@ -8,6 +8,8 @@ import CityList from '../../components/city-list/city-list';
 import SortForm from '../../components/sort-form/sort-form';
 import { AppCitiesCoordinates, AppPageName, CITIES } from '../../const';
 import { Offer } from '../../types/offers-type';
+import { useAppSelector } from '../../hooks/store';
+import { sortOffer } from '../../util';
 
 type StartScreenProp = {
   placeCount: number;
@@ -17,6 +19,7 @@ type StartScreenProp = {
 
 const StartScreen = ({ placeCount, offers, currentCity }: StartScreenProp): JSX.Element => {
   const [activePlaceCardId, setActivePlaceCardId] = useState<number | null>(null);
+  const currentSortType = useAppSelector((state) => state.sortOfferType);
 
   return (
     <div className="page page--gray page--main">
@@ -40,10 +43,12 @@ const StartScreen = ({ placeCount, offers, currentCity }: StartScreenProp): JSX.
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
               <b className="places__found">{placeCount} places to stay in {currentCity}</b>
+
               <SortForm />
+
               <div className="cities__places-list places__list tabs__content">
 
-                {<OfferList offers={offers} pageName={AppPageName.Main} onSetActiveCardId={setActivePlaceCardId}/>}
+                {<OfferList offers={sortOffer(currentSortType, offers)} pageName={AppPageName.Main} onSetActiveCardId={setActivePlaceCardId}/>}
 
               </div>
             </section>

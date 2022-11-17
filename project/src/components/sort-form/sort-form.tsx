@@ -1,6 +1,6 @@
 import cn from 'classnames';
 import { useState } from 'react';
-import { SORT_TYPES } from '../../const';
+import { SortType } from '../../const';
 import { useAppSelector } from '../../hooks/store';
 import SortOption from '../sort-options/sort-options';
 
@@ -26,7 +26,7 @@ const SortForm = (): JSX.Element => {
         {'places__options--closed': !isSortListOpen}
       )}
       >
-        {SORT_TYPES.map((type) => <SortOption key={type} optionName={type} isActive={type === currentSortType} onSetListStatus={setSortListStatus} />)}
+        {Object.values(SortType).map((type) => <SortOption key={type} optionName={type} isActive={type === currentSortType} onSetListStatus={setSortListStatus} />)}
       </ul>
     </form>
   );
