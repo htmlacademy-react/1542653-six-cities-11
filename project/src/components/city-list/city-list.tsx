@@ -1,12 +1,13 @@
 import CityItem from '../city-item/city-item';
 import { useAppSelector } from '../../hooks/store';
+import { getCurrentCity } from '../../store/selectors';
 
 type CityListProp = {
   cities: string[];
 }
 
 const CityList = ({cities}: CityListProp): JSX.Element => {
-  const currentCity = useAppSelector((state) => state.currentCity);
+  const currentCity = useAppSelector(getCurrentCity);
 
   return (
     <ul className="locations__list tabs__list">

@@ -9,17 +9,18 @@ import SortForm from '../../components/sort-form/sort-form';
 import { AppCitiesCoordinates, AppPageName, CITIES } from '../../const';
 import { Offer } from '../../types/offers-type';
 import { useAppSelector } from '../../hooks/store';
+import { getCurrentCity, getCurrentSort } from '../../store/selectors';
 import { sortOffer } from '../../util';
 
 type StartScreenProp = {
-  placeCount: number;
   offers: Offer[];
-  currentCity: string;
 };
 
-const StartScreen = ({ placeCount, offers, currentCity }: StartScreenProp): JSX.Element => {
+const StartScreen = ({ offers }: StartScreenProp): JSX.Element => {
   const [activePlaceCardId, setActivePlaceCardId] = useState<number | null>(null);
-  const currentSortType = useAppSelector((state) => state.sortOfferType);
+  const currentCity = useAppSelector(getCurrentCity);
+  const placeCount = offers.length;
+  const currentSortType = useAppSelector(getCurrentSort);
 
   return (
     <div className="page page--gray page--main">
