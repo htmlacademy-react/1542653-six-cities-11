@@ -18,3 +18,9 @@ export const setFavoriteOffers = createAction('setFavoriteOffers', (offers: Offe
     offers: offers
   }
 }));
+
+export const setSortType = createAction('setSortType', (type: string) => ({
+  payload: {
+    type
+  }
+}));

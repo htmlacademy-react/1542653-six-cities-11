@@ -9,22 +9,21 @@ import UnexistScreen from '../../pages/unexist-screen/unexist-screen';
 import PrivateRoute from '../PrivateRoute/PrivateRoute';
 import { Review } from '../../types/reviews-type';
 import { useAppSelector } from '../../hooks/store';
+import { filterOffers, getFavoriteOffers} from '../../store/selectors';
 
 type AppProp = {
   reviews: Review[];
 }
 
 function App({ reviews }: AppProp): JSX.Element {
-  const currentCity = useAppSelector((state) => state.currentCity);
-  const offers = useAppSelector((state) => state.offers.filter((offer) => offer.city.name === currentCity));
-  const favoriteOffers = useAppSelector((state) => state.favorites);
-  const placeCount = offers.length;
+  const offers = useAppSelector(filterOffers);
+  const favoriteOffers = useAppSelector(getFavoriteOffers);
 
   return (
     <HelmetProvider>
       <BrowserRouter>
         <Routes>
-          <Route path={AppRoute.Main} element={<StartScreen currentCity={currentCity} offers={offers} placeCount={placeCount} />} />
+          <Route path={AppRoute.Main} element={<StartScreen offers={offers} />} />
           <Route path={AppRoute.Login} element={<AuthScreen />} />
           <Route path={AppRoute.Favorites} element={
             <PrivateRoute userAuthStatus={UserAuthStatus.Auth}>
