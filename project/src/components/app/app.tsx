@@ -9,14 +9,14 @@ import UnexistScreen from '../../pages/unexist-screen/unexist-screen';
 import PrivateRoute from '../PrivateRoute/PrivateRoute';
 import { Review } from '../../types/reviews-type';
 import { useAppSelector } from '../../hooks/store';
-import { filterOffers, getFavoriteOffers} from '../../store/selectors';
+import { getFilteredOffers, getFavoriteOffers} from '../../store/selectors';
 
 type AppProp = {
   reviews: Review[];
 }
 
 function App({ reviews }: AppProp): JSX.Element {
-  const offers = useAppSelector(filterOffers);
+  const offers = useAppSelector(getFilteredOffers);
   const favoriteOffers = useAppSelector(getFavoriteOffers);
 
   return (

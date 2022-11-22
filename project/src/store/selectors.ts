@@ -10,7 +10,10 @@ export const getFavoriteOffers = (state: State): Offer[] => state.favorites;
 
 export const getCurrentSort = (state: State): string => state.sortOfferType;
 
-export const filterOffers = createSelector(
+export const getFilteredOffers = createSelector(
   [getOffers, getCurrentCity],
   (offers, targetCity) => offers.filter((offer) => offer.city.name === targetCity)
 );
+
+export const getOfferLoadedStatus = (state: State): boolean => state.isOfferLoaded;
+

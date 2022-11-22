@@ -45,9 +45,13 @@ const Map = ({ city, points, selectedPlaceId, isMainPage }: MapProp): JSX.Elemen
   useEffect(() => {
     if (map) {
       addMarkersToCard(markerList, map);
+      map.setView({
+        lat: city.latitude,
+        lng: city.longitude
+      }, city.zoom);
     }
     return () => cleanMarkers(markerList);
-  }, [map, markerList]);
+  }, [map, markerList, city]);
 
   return (
     <section className={cn('map', { 'cities__map': isMainPage }, { 'property__map': !isMainPage })} ref={mapRef}></section>
