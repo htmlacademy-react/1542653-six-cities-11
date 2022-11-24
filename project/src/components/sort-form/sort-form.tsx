@@ -3,9 +3,11 @@ import { useState } from 'react';
 import { SortType } from '../../const';
 import { useAppSelector } from '../../hooks/store';
 import SortOption from '../sort-options/sort-options';
+import { getCurrentSort } from '../../store/selectors';
+
 
 const SortForm = (): JSX.Element => {
-  const currentSortType = useAppSelector((state) => state.sortOfferType);
+  const currentSortType = useAppSelector(getCurrentSort);
   const [isSortListOpen, setSortListStatus] = useState(false);
 
   const clickSortListHandler = () => setSortListStatus(!isSortListOpen);
