@@ -60,17 +60,26 @@ const PlaceCardSize = {
   mainCardHeight: 200
 };
 
+const SERVER_URL = 'https://11.react.pages.academy/six-cities';
+const REQUEST_TIMEOUT = 5000;
+enum APIRoutes {
+  Offers = '/hotels'
+}
+
 export {
   CARD_QTY_ON_PAGE,
   MAX_PLACE_RATING,
   DEFAULT_CITY,
   CITIES,
   DEFAULT_SORT_TYPE,
+  SERVER_URL,
+  REQUEST_TIMEOUT,
   SortType,
   AppRoute,
   UserAuthStatus,
   PlaceRating,
   AppCitiesCoordinates,
   AppPageName,
-  PlaceCardSize
+  PlaceCardSize,
+  APIRoutes
 };

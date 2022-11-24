@@ -4,11 +4,9 @@ import { Provider } from 'react-redux';
 import App from './components/app/app';
 import reviews from './mock/reviews';
 import store from './store/store';
-import offers from './mock/offers';
-import { setOffers, setFavoriteOffers } from './store/actions';
+import { fetchOffers } from './store/api-actions';
 
-store.dispatch(setOffers(offers));
-store.dispatch(setFavoriteOffers(offers.filter((offer) => offer.isFavorite)));
+store.dispatch(fetchOffers());
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,

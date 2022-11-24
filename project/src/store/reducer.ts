@@ -4,7 +4,8 @@ import {
   setCurrentCity,
   setOffers,
   setFavoriteOffers,
-  setSortType
+  setSortType,
+  setOfferLoaderStatus
 } from './actions';
 import { DEFAULT_CITY, DEFAULT_SORT_TYPE } from './../const';
 
@@ -13,13 +14,15 @@ type InitialState = {
   offers: Offer[];
   favorites: Offer[];
   sortOfferType: string;
+  isOfferLoaded: boolean;
 };
 
 const initialState: InitialState = {
   currentCity: DEFAULT_CITY,
   offers: [],
   favorites: [],
-  sortOfferType: DEFAULT_SORT_TYPE
+  sortOfferType: DEFAULT_SORT_TYPE,
+  isOfferLoaded: false
 };
 
 const reducer = createReducer(initialState, (builder) => {
@@ -35,6 +38,9 @@ const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(setSortType, (state, action) => {
       state.sortOfferType = action.payload.type;
+    })
+    .addCase(setOfferLoaderStatus, (state, action) => {
+      state.isOfferLoaded = action.payload.status;
     });
 });
 
