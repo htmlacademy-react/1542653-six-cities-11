@@ -30,3 +30,9 @@ export const setOfferLoaderStatus = createAction('setOfferLoadedStatus', (status
     status
   }
 }));
+
+export const setAuthStatus = createAction('setAuthStatus', (authStatus: string) => ({
+  payload: {
+    authStatus
+  }
+}));

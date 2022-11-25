@@ -17,3 +17,4 @@ export const getFilteredOffers = createSelector(
 
 export const getOfferLoadedStatus = (state: State): boolean => state.isOfferLoaded;
 
+export const getUserAuthStatus = (state: State): string => state.authorizationStatus;

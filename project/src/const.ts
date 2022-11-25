@@ -63,7 +63,8 @@ const PlaceCardSize = {
 const SERVER_URL = 'https://11.react.pages.academy/six-cities';
 const REQUEST_TIMEOUT = 5000;
 enum APIRoutes {
-  Offers = '/hotels'
+  Offers = '/hotels',
+  Login = '/login'
 }
 
 export {

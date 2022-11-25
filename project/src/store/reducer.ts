@@ -5,9 +5,10 @@ import {
   setOffers,
   setFavoriteOffers,
   setSortType,
-  setOfferLoaderStatus
+  setOfferLoaderStatus,
+  setAuthStatus
 } from './actions';
-import { DEFAULT_CITY, DEFAULT_SORT_TYPE } from './../const';
+import { DEFAULT_CITY, DEFAULT_SORT_TYPE, UserAuthStatus } from './../const';
 
 type InitialState = {
   currentCity: string;
@@ -15,6 +16,7 @@ type InitialState = {
   favorites: Offer[];
   sortOfferType: string;
   isOfferLoaded: boolean;
+  authorizationStatus: string;
 };
 
 const initialState: InitialState = {
@@ -22,7 +24,8 @@ const initialState: InitialState = {
   offers: [],
   favorites: [],
   sortOfferType: DEFAULT_SORT_TYPE,
-  isOfferLoaded: false
+  isOfferLoaded: false,
+  authorizationStatus: UserAuthStatus.Unknown,
 };
 
 const reducer = createReducer(initialState, (builder) => {
@@ -41,6 +44,9 @@ const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(setOfferLoaderStatus, (state, action) => {
       state.isOfferLoaded = action.payload.status;
+    })
+    .addCase(setAuthStatus, (state, action) => {
+      state.authorizationStatus = action.payload.authStatus;
     });
 });
 
