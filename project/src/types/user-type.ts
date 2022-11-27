@@ -6,3 +6,8 @@ export type User = {
   name: string;
   token: string;
 };
+
+export type UserLogin = {
+  email: string;
+  password: string;
+}
