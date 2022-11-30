@@ -11,7 +11,7 @@ export const getHuminizeDate = (date: string): string => dayjs(date).format('MMM
 
 export const getMachineDate = (date: string): string =>dayjs(date).format('YYYY-MM-DD');
 
-export const sortOffer = (type: string, offers: Offer[]) => {
+export const getSortOffer = (type: string, offers: Offer[]) => {
   switch (type) {
     case SortType.LowToHigh: return [...offers].sort((prev, next) => prev.price - next.price);
     case SortType.HighToLow: return [...offers].sort((prev, next) => next.price - prev.price);

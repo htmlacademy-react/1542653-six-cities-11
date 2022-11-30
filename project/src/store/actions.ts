@@ -1,5 +1,6 @@
 import { createAction } from '@reduxjs/toolkit';
 import { Offer } from '../types/offers-type';
+import { User } from '../types/user-type';
 
 export const setCurrentCity = createAction('setCurrentCity', (city: string) => ({
   payload: {
@@ -25,8 +26,38 @@ export const setSortType = createAction('setSortType', (type: string) => ({
   }
 }));
 
-export const setOfferLoaderStatus = createAction('setOfferLoadedStatus', (status: boolean) => ({
+export const setOfferLoaderStatus = createAction('setOfferLoaderStatus', (status: boolean) => ({
   payload: {
     status
+  }
+}));
+
+export const setOfferLoadingErrorStatus = createAction('setOfferLoadingErrorStatus', (status: boolean) => ({
+  payload: {
+    status
+  }
+}));
+
+export const setAuthStatus = createAction('setAuthStatus', (authStatus: string) => ({
+  payload: {
+    authStatus
+  }
+}));
+
+export const setUser = createAction('setUser', (user: User | null) => ({
+  payload: {
+    user
+  }
+}));
+
+export const setLoginError = createAction('setLoginError', (errorLoginStatus: boolean) => ({
+  payload: {
+    errorLoginStatus
+  }
+}));
+
+export const setLogoutError = createAction('setLogoutError', (errorLogoutStatus: boolean) => ({
+  payload: {
+    errorLogoutStatus
   }
 }));
