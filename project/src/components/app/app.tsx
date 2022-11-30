@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
-import { AppRoute, UserAuthStatus } from '../../const';
+import { AppRoute } from '../../const';
 import StartScreen from '../../pages/start-screen/start-screen';
 import AuthScreen from '../../pages/auth-screen/auth-screen';
 import FavoritesScreen from '../../pages/favorites-screen/favorites-screen';
@@ -9,7 +9,7 @@ import UnexistScreen from '../../pages/unexist-screen/unexist-screen';
 import PrivateRoute from '../PrivateRoute/PrivateRoute';
 import { Review } from '../../types/reviews-type';
 import { useAppSelector } from '../../hooks/store';
-import { getFilteredOffers, getFavoriteOffers} from '../../store/selectors';
+import { getFilteredOffers, getFavoriteOffers, getUserAuthStatus} from '../../store/selectors';
 
 type AppProp = {
   reviews: Review[];
@@ -18,6 +18,7 @@ type AppProp = {
 function App({ reviews }: AppProp): JSX.Element {
   const offers = useAppSelector(getFilteredOffers);
   const favoriteOffers = useAppSelector(getFavoriteOffers);
+  const userAuthStatus = useAppSelector(getUserAuthStatus);
 
   return (
     <HelmetProvider>
@@ -26,7 +27,7 @@ function App({ reviews }: AppProp): JSX.Element {
           <Route path={AppRoute.Main} element={<StartScreen offers={offers} />} />
           <Route path={AppRoute.Login} element={<AuthScreen />} />
           <Route path={AppRoute.Favorites} element={
-            <PrivateRoute userAuthStatus={UserAuthStatus.Auth}>
+            <PrivateRoute userAuthStatus={userAuthStatus}>
               <FavoritesScreen offers={favoriteOffers} />
             </PrivateRoute>
           }

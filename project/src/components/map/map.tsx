@@ -35,7 +35,7 @@ const Map = ({ city, points, selectedPlaceId, isMainPage }: MapProp): JSX.Elemen
     lat: point.locations.latitude,
     lng: point.locations.longitude,
   }, {
-    icon: selectedPlaceId === point.id ? pinActive : pin,
+    icon: selectedPlaceId === point.id && isMainPage ? pinActive : pin,
   }));
 
   const addMarkersToCard = (markers: leaflet.Marker[], mapLayer: leaflet.Map) => markers.forEach((marker) => marker.addTo(mapLayer));

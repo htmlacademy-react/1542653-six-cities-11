@@ -1,6 +1,7 @@
 import { Offer } from '../types/offers-type';
 import { State } from '../types/state';
 import { createSelector } from '@reduxjs/toolkit';
+import { User } from '../types/user-type';
 
 export const getCurrentCity = (state: State): string => state.currentCity;
 
@@ -16,4 +17,10 @@ export const getFilteredOffers = createSelector(
 );
 
 export const getOfferLoadedStatus = (state: State): boolean => state.isOfferLoaded;
+
+export const getOfferLoadingErrorStatus = (state: State): boolean => state.offerLoadingErrorStatus;
+
+export const getUserAuthStatus = (state: State): string => state.authorizationStatus;
+
+export const getUser = (state: State): User | null => state.user;
 
