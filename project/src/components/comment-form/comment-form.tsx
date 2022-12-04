@@ -14,7 +14,6 @@ import './comment-form.css';
 const CommentForm = (): JSX.Element => {
   const commentErrorStatus = useAppSelector(getCommentErrorStatus);
   const isCommentSent = useAppSelector(getCommentStatus);
-  //console.log(commentErrorStatus)
   const [commentText, setCommentText] = useState('');
   const [rating, setRating] = useState(0);
   const [isFormDisabled, setFormStatus] = useState(false);
@@ -37,9 +36,6 @@ const CommentForm = (): JSX.Element => {
   };
 
   useEffect(() => {
-    // console.log('effect')
-    // console.log(isFormDisabled)
-    // console.log(commentErrorStatus)
     if (isFormDisabled && commentErrorStatus) {
       setFormStatus(false);
     }
