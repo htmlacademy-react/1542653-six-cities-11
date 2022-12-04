@@ -1,6 +1,14 @@
-import { Location } from './types/offers-type';
-const CARD_QTY_ON_PAGE = 5;
-const MAX_PLACE_RATING = 5;
+const Limits = {
+  CardQtyOnPage: 5,
+  MaxPlaceRating: 5,
+  MaxPhotosOnPage: 6,
+  MaxCommentsOnPage: 10,
+  MinCommentSymbols: 50,
+  MaxCommentSymbols: 300,
+  RequestTimeout: 5000,
+  ErrorDeleteTimeout: 5000,
+};
+
 
 enum AppRoute {
   Main = '/',
@@ -23,16 +31,6 @@ const PlaceRating: {
   'not bad': 3,
   'badly': 2,
   'terribly': 1
-};
-
-const AppCitiesCoordinates: {
-  [cityName: string]: Location;
-} = {
-  'Amsterdam': {
-    latitude: 52.370216,
-    longitude: 4.895168,
-    zoom: 10
-  },
 };
 
 const DEFAULT_CITY = 'Paris';
@@ -61,11 +59,13 @@ const PlaceCardSize = {
 };
 
 const SERVER_URL = 'https://11.react.pages.academy/six-cities';
-const REQUEST_TIMEOUT = 5000;
+
 enum APIRoutes {
   Offers = '/hotels',
   Login = '/login',
   Logout = '/logout',
+  Reviews = '/comments',
+  Favorite = '/favorite'
 }
 
 enum ServerResponseActions {
@@ -76,20 +76,17 @@ enum ServerResponseActions {
 }
 
 export {
-  CARD_QTY_ON_PAGE,
-  MAX_PLACE_RATING,
   DEFAULT_CITY,
   CITIES,
   DEFAULT_SORT_TYPE,
   SERVER_URL,
-  REQUEST_TIMEOUT,
   SortType,
   AppRoute,
   UserAuthStatus,
   PlaceRating,
-  AppCitiesCoordinates,
   AppPageName,
   PlaceCardSize,
   APIRoutes,
-  ServerResponseActions
+  ServerResponseActions,
+  Limits
 };

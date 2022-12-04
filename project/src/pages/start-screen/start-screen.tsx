@@ -1,5 +1,4 @@
 import cn from 'classnames';
-import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import PageHeader from '../../components/page-header/page-header';
 import PageNavigation from '../../components/page-navigation/page-navigation';
@@ -7,11 +6,11 @@ import OfferList from '../../components/offer-list/offer-list';
 import Map from '../../components/map/map';
 import CityList from '../../components/city-list/city-list';
 import SortForm from '../../components/sort-form/sort-form';
-import CityPlacesList from '../../components/city-places-list/city-places-list';
+import CityPlacesStub from '../../components/city-places-stub/city-places-stub';
 import { AppPageName, CITIES, ServerResponseActions } from '../../const';
 import { Offer } from '../../types/offers-type';
 import { useAppSelector } from '../../hooks/store';
-import { getCurrentCity, getCurrentSort } from '../../store/selectors';
+import { getCurrentCity, getCurrentSort, getActivePlaceCardId } from '../../store/selectors';
 import { getSortOffer } from '../../util';
 import useServerAction from '../../hooks/useServerAction';
 
@@ -20,8 +19,8 @@ type StartScreenProp = {
 };
 
 const StartScreen = ({ offers }: StartScreenProp): JSX.Element => {
-  const [activePlaceCardId, setActivePlaceCardId] = useState<number | null>(null);
   const currentCity = useAppSelector(getCurrentCity);
+  const activePlaceCardId = useAppSelector(getActivePlaceCardId);
   const placeCount = offers.length;
   const currentSortType = useAppSelector(getCurrentSort);
   const location = placeCount ? {...offers[0].city.location} : null;
@@ -64,7 +63,7 @@ const StartScreen = ({ offers }: StartScreenProp): JSX.Element => {
 
                   <div className="cities__places-list places__list tabs__content">
 
-                    <OfferList offers={getSortOffer(currentSortType, offers)} pageName={AppPageName.Main} onSetActiveCardId={setActivePlaceCardId} />
+                    <OfferList offers={getSortOffer(currentSortType, offers)} pageName={AppPageName.Main} />
 
                   </div>
                 </section>
@@ -77,7 +76,7 @@ const StartScreen = ({ offers }: StartScreenProp): JSX.Element => {
                   />
                 </div>
               </div>
-              : <CityPlacesList action={action} />
+              : <CityPlacesStub action={action} />
           }
         </div>
       </main>

@@ -12,3 +12,10 @@ export type Review = {
   rating: number;
   user: User;
 };
+
+export type CommentTemplateType = {
+  offerId: number;
+  comment: string;
+  rating: number;
+};
+
