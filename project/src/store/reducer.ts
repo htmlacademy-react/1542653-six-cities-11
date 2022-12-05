@@ -11,9 +11,21 @@ import {
   setUser,
   setLoginError,
   setLogoutError,
-  setOfferLoadingErrorStatus
+  setOfferLoadingErrorStatus,
+  setCurrentOffer,
+  setCurrentOfferError,
+  setReviews,
+  setReviewErrorStatus,
+  setNearbyOffers,
+  setCreationCommentErrorStatus,
+  setLoadingFavoriteErrorStatus,
+  setCommentStatus,
+  updateOffers,
+  updateFavoriteOffers,
+  setActivePlaceCardId
 } from './actions';
 import { DEFAULT_CITY, DEFAULT_SORT_TYPE, UserAuthStatus } from './../const';
+import { Review } from '../types/reviews-type';
 
 type InitialState = {
   currentCity: string;
@@ -26,6 +38,15 @@ type InitialState = {
   user: User | null;
   loginErrorStatus: boolean;
   logoutErrorStatus: boolean;
+  currentOffer: Offer | null;
+  currentOfferError: boolean;
+  reviews: Review[] | null;
+  reviewErrorStatus: boolean;
+  nearbyOffers: Offer[];
+  creationCommentErrorStatus: boolean;
+  isCommentSent: boolean;
+  favoriteLoadingErrorStatus: boolean;
+  activePlaceCardId: number;
 };
 
 const initialState: InitialState = {
@@ -39,6 +60,15 @@ const initialState: InitialState = {
   user: null,
   loginErrorStatus: false,
   logoutErrorStatus: false,
+  currentOffer: null,
+  currentOfferError: false,
+  reviews: null,
+  reviewErrorStatus: false,
+  nearbyOffers: [],
+  creationCommentErrorStatus: false,
+  isCommentSent: false,
+  favoriteLoadingErrorStatus: false,
+  activePlaceCardId: 0
 };
 
 const reducer = createReducer(initialState, (builder) => {
@@ -72,6 +102,41 @@ const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(setLogoutError, (state, action) => {
       state.logoutErrorStatus = action.payload.errorLogoutStatus;
+    })
+    .addCase(setCurrentOffer, (state, action) => {
+      state.currentOffer = action.payload.offer;
+    })
+    .addCase(setCurrentOfferError, (state, action) => {
+      state.currentOfferError = action.payload.offerErrorStatus;
+    })
+    .addCase(setReviews, (state, action) => {
+      state.reviews = action.payload.reviews;
+    })
+    .addCase(setReviewErrorStatus, (state, action) => {
+      state.reviewErrorStatus = action.payload.status;
+    })
+    .addCase(setNearbyOffers, (state, action) => {
+      state.nearbyOffers = action.payload.offers;
+    })
+    .addCase(setCreationCommentErrorStatus, (state, action) => {
+      state.creationCommentErrorStatus = action.payload.status;
+    })
+    .addCase(setLoadingFavoriteErrorStatus, (state, action) => {
+      state.favoriteLoadingErrorStatus = action.payload.status;
+    })
+    .addCase(setCommentStatus, (state, action) => {
+      state.isCommentSent = action.payload.status;
+    })
+    .addCase(updateOffers, (state, action) => {
+      state.offers = state.offers.map((offer) => offer.id === action.payload.updateOffer.id ? action.payload.updateOffer : offer);
+    })
+    .addCase(updateFavoriteOffers, (state, action) => {
+      state.favorites = [...state.favorites, action.payload.updateOffer]
+        .map((offer) => offer.id === action.payload.updateOffer.id ? action.payload.updateOffer : offer)
+        .filter((offer) => offer.isFavorite);
+    })
+    .addCase(setActivePlaceCardId, (state, action) => {
+      state.activePlaceCardId = action.payload.activeCardId;
     });
 });
 

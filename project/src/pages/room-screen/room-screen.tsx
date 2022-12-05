@@ -1,29 +1,63 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import UnexistScreen from '../unexist-screen/unexist-screen';
 import PageHeader from '../../components/page-header/page-header';
 import PageNavigation from '../../components/page-navigation/page-navigation';
 import CommentForm from '../../components/comment-form/comment-form';
 import ReviewList from '../../components/review-list/review-list';
 import OfferList from '../../components/offer-list/offer-list';
+import OfferPhotoItem from '../../components/offer-photo-item/offer-photo-item';
+import OfferInsideItem from '../../components/offer-inside-item/offer-inside-item';
 import Map from '../../components/map/map';
-import { AppPageName } from '../../const';
-import { Offer } from '../../types/offers-type';
-import { Review } from '../../types/reviews-type';
+import Spinner from '../../components/spinner/spinner';
+import { AppPageName, AppRoute, UserAuthStatus, Limits } from '../../const';
+import { changeFavoriteOfferStatus, fetchNearbyOffers, fetchOffer, fetchReviews } from '../../store/api-actions';
+import { useAppSelector, useAppDispatch } from '../../hooks/store';
+import { getCurrentOffer, getReviews, getNerbyOffers, getUserAuthStatus, getCurrentOfferErrorStatus } from '../../store/selectors';
+import { setCurrentOffer, setCurrentOfferError, setNearbyOffers, setReviews } from '../../store/actions';
+import { getPercent, adaptAppartmentType, compareDates } from '../../util';
+import classNames from 'classnames';
+import './room-screen.css';
 
-type RoomScreenProp = {
-  offers: Offer[];
-  reviews: Review[];
-}
-
-const RoomScreen = ({ offers, reviews }: RoomScreenProp): JSX.Element => {
+const RoomScreen = (): JSX.Element => {
   const queryParam = useParams();
-  const { id } = queryParam;
-  const currentOffer = offers.find((offer) => offer.id === Number(id));
-  const [activeNeighbourhoodCard, setActiveNeighbourhoodCard] = useState<null | number>(null);
+  const navigate = useNavigate();
+  const id = Number(queryParam.id);
 
-  return currentOffer ? (
+  const currentOffer = useAppSelector(getCurrentOffer);
+  const reviews = useAppSelector(getReviews);
+  const renderedRewiews = reviews ? reviews.slice(0, Limits.MaxCommentsOnPage).sort((review, nextReview) => compareDates(review.date, nextReview.date)) : [];
+  const nearbyOffers = useAppSelector(getNerbyOffers);
+  const currentUserAuthStatus = useAppSelector(getUserAuthStatus);
+  const currentOfferErrorStatus = useAppSelector(getCurrentOfferErrorStatus);
+  const dispatch = useAppDispatch();
+
+  const onClickFivoriteOfferHandler = () => {
+    if (currentOffer && currentUserAuthStatus === UserAuthStatus.Auth) {
+      dispatch(changeFavoriteOfferStatus(currentOffer));
+      return;
+    }
+    navigate(AppRoute.Login);
+  };
+
+  useEffect(() => {
+    dispatch(fetchOffer(id));
+    dispatch(fetchReviews(id));
+    dispatch(fetchNearbyOffers(id));
+    return () => {
+      dispatch(setCurrentOffer(null));
+      dispatch(setReviews(null));
+      dispatch(setNearbyOffers([]));
+      dispatch(setCurrentOfferError(false));
+    };
+  }, [id, dispatch]);
+
+  if (currentOfferErrorStatus) {
+    return <UnexistScreen />;
+  }
+
+  return currentOffer && reviews && nearbyOffers.length ? (
     <div className="page">
       <Helmet>
         <title>6 cities. Room overview</title>
@@ -37,36 +71,28 @@ const RoomScreen = ({ offers, reviews }: RoomScreenProp): JSX.Element => {
         <section className="property">
           <div className="property__gallery-container container">
             <div className="property__gallery">
-              <div className="property__image-wrapper">
-                <img className="property__image" src="img/room.jpg" alt="studio" />
-              </div>
-              <div className="property__image-wrapper">
-                <img className="property__image" src="img/apartment-01.jpg" alt="studio" />
-              </div>
-              <div className="property__image-wrapper">
-                <img className="property__image" src="img/apartment-02.jpg" alt="studio" />
-              </div>
-              <div className="property__image-wrapper">
-                <img className="property__image" src="img/apartment-03.jpg" alt="studio" />
-              </div>
-              <div className="property__image-wrapper">
-                <img className="property__image" src="img/studio-01.jpg" alt="studio" />
-              </div>
-              <div className="property__image-wrapper">
-                <img className="property__image" src="img/apartment-01.jpg" alt="studio" />
-              </div>
+              {currentOffer.images.slice(0, Limits.MaxPhotosOnPage).map((url) => <OfferPhotoItem key={url} imgUrl={url} type={currentOffer.type} />)}
             </div>
           </div>
           <div className="property__container container">
             <div className="property__wrapper">
-              <div className="property__mark">
+              <div className="property__mark" style={!currentOffer.isPremium ? {display: 'none'} : {}}>
                 <span>Premium</span>
               </div>
               <div className="property__name-wrapper">
                 <h1 className="property__name">
-                  Beautiful &amp; luxurious studio at great location
+                  {currentOffer.title}
                 </h1>
-                <button className="property__bookmark-button button" type="button">
+                <button className={
+                  classNames(
+                    'property__bookmark-button',
+                    'button',
+                    {'property__bookmark-button--active': currentOffer.isFavorite}
+                  )
+                }
+                type="button"
+                onClick={onClickFivoriteOfferHandler}
+                >
                   <svg className="property__bookmark-icon" width="31" height="33">
                     <use xlinkHref="#icon-bookmark"></use>
                   </svg>
@@ -75,88 +101,58 @@ const RoomScreen = ({ offers, reviews }: RoomScreenProp): JSX.Element => {
               </div>
               <div className="property__rating rating">
                 <div className="property__stars rating__stars">
-                  <span style={{ width: '80%' }}></span>
+                  <span style={{ width: getPercent(currentOffer.rating) }}></span>
                   <span className="visually-hidden">Rating</span>
                 </div>
-                <span className="property__rating-value rating__value">4.8</span>
+                <span className="property__rating-value rating__value">{currentOffer.rating}</span>
               </div>
               <ul className="property__features">
                 <li className="property__feature property__feature--entire">
-                  Apartment
+                  {adaptAppartmentType(currentOffer.type)}
                 </li>
                 <li className="property__feature property__feature--bedrooms">
-                  3 Bedrooms
+                  {currentOffer.bedrooms} Bedrooms
                 </li>
                 <li className="property__feature property__feature--adults">
-                  Max 4 adults
+                  Max {currentOffer.maxAdults} adults
                 </li>
               </ul>
               <div className="property__price">
-                <b className="property__price-value">&euro;120</b>
+                <b className="property__price-value">&euro;{currentOffer.price}</b>
                 <span className="property__price-text">&nbsp;night</span>
               </div>
               <div className="property__inside">
                 <h2 className="property__inside-title">What&apos;s inside</h2>
                 <ul className="property__inside-list">
-                  <li className="property__inside-item">
-                    Wi-Fi
-                  </li>
-                  <li className="property__inside-item">
-                    Washing machine
-                  </li>
-                  <li className="property__inside-item">
-                    Towels
-                  </li>
-                  <li className="property__inside-item">
-                    Heating
-                  </li>
-                  <li className="property__inside-item">
-                    Coffee machine
-                  </li>
-                  <li className="property__inside-item">
-                    Baby seat
-                  </li>
-                  <li className="property__inside-item">
-                    Kitchen
-                  </li>
-                  <li className="property__inside-item">
-                    Dishwasher
-                  </li>
-                  <li className="property__inside-item">
-                    Cabel TV
-                  </li>
-                  <li className="property__inside-item">
-                    Fridge
-                  </li>
+
+                  {currentOffer.goods.map((item) => < OfferInsideItem key={item} item={item} />)}
+
                 </ul>
               </div>
               <div className="property__host">
                 <h2 className="property__host-title">Meet the host</h2>
                 <div className="property__host-user user">
                   <div className="property__avatar-wrapper property__avatar-wrapper--pro user__avatar-wrapper">
-                    <img className="property__avatar user__avatar" src="img/avatar-angelina.jpg" width="74" height="74" alt="Host avatar" />
+                    <img className="property__avatar user__avatar" src={currentOffer.host.avatarUrl} width="74" height="74" alt="Host avatar" />
                   </div>
                   <span className="property__user-name">
-                    Angelina
+                    {currentOffer.host.name}
                   </span>
                   <span className="property__user-status">
-                    Pro
+                    {currentOffer.host.isPro ? 'Pro' : ''}
                   </span>
                 </div>
                 <div className="property__description">
                   <p className="property__text">
-                    A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam. The building is green and from 18th century.
-                  </p>
-                  <p className="property__text">
-                    An independent House, strategically located between Rembrand Square and National Opera, but where the bustle of the city comes to rest in this alley flowery and colorful.
+                    {currentOffer.description}
                   </p>
                 </div>
               </div>
               <section className="property__reviews reviews">
 
-                <ReviewList reviews={reviews}/>
+                <ReviewList reviews={renderedRewiews}/>
 
-                <CommentForm />
+                {currentUserAuthStatus === UserAuthStatus.Auth ? <CommentForm /> : undefined}
 
               </section>
             </div>
@@ -165,8 +161,8 @@ const RoomScreen = ({ offers, reviews }: RoomScreenProp): JSX.Element => {
           <Map
             isMainPage={false}
             city={currentOffer.city.location}
-            points={offers.slice(0, 3).map((offer) => ({id: offer.id, locations: {...offer.location}}))}
-            selectedPlaceId={activeNeighbourhoodCard}
+            points={nearbyOffers.map((offer) => ({id: offer.id, locations: {...offer.location}}))}
+            selectedPlaceId={currentOffer.id}
           />
 
         </section>
@@ -176,9 +172,8 @@ const RoomScreen = ({ offers, reviews }: RoomScreenProp): JSX.Element => {
             <div className="near-places__list places__list">
 
               <OfferList
-                offers={offers.slice(0, 3)}
+                offers={nearbyOffers}
                 pageName={AppPageName.Room}
-                onSetActiveCardId={setActiveNeighbourhoodCard}
               />
 
             </div>
@@ -187,7 +182,7 @@ const RoomScreen = ({ offers, reviews }: RoomScreenProp): JSX.Element => {
       </main>
     </div>
   )
-    : <UnexistScreen />;
+    : <Spinner />;
 };
 
 export default RoomScreen;

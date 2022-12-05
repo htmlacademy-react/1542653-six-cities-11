@@ -17,17 +17,10 @@ const FavoriteLocationList = ({ offers }: FavoriteLocationListProp): JSX.Element
     <ul className="favorites__list">
       {cities.map((city) => {
         const favoriteOffersForCity = favoriteOffers.filter((offer) => offer.city.name === city);
-        const cards = favoriteOffersForCity.map(({id, price, rating, isPremium, isFavorite, previewImage, title, type}) => (
+        const cards = favoriteOffersForCity.map((offer) => (
           <PlaceCard
-            id={id}
-            key={id}
-            type={type}
-            title={title}
-            price={price}
-            rating={rating}
-            isPremium={isPremium}
-            isFavorite={isFavorite}
-            previewImage={previewImage}
+            key={offer.id}
+            offer={offer}
             pageName={AppPageName.Favorites}
           />
         ));
