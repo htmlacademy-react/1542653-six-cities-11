@@ -24,3 +24,17 @@ export const getUserAuthStatus = (state: State): string => state.authorizationSt
 
 export const getUser = (state: State): User | null => state.user;
 
+export const getCurrentOffer = (state: State) => state.currentOffer;
+
+export const getCurrentOfferErrorStatus = (state: State) => state.currentOfferError;
+
+export const getReviews = (state: State) => state.reviews;
+
+export const getNerbyOffers = (state: State) => state.nearbyOffers;
+
+export const getCommentErrorStatus = (state: State) => state.creationCommentErrorStatus;
+
+export const getCommentStatus = (state: State) => state.isCommentSent;
+
+export const getActivePlaceCardId = (state: State) => state.activePlaceCardId;
+

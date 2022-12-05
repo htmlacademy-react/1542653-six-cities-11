@@ -1,11 +1,13 @@
 import dayjs from 'dayjs';
-import { MAX_PLACE_RATING, SortType } from './const';
+import { SortType, Limits } from './const';
 import { Offer } from './types/offers-type';
 
 export const getPercent = (rating: number): string => {
-  const percent = (Math.round(rating) / MAX_PLACE_RATING) * 100;
+  const percent = (Math.round(rating) / Limits.MaxPlaceRating) * 100;
   return `${percent}%`;
 };
+
+export const adaptAppartmentType = (type: string) => `${type[0].toUpperCase() + type.substring(1)}`;
 
 export const getHuminizeDate = (date: string): string => dayjs(date).format('MMMM YYYY');
 
@@ -19,3 +21,5 @@ export const getSortOffer = (type: string, offers: Offer[]) => {
     default: return offers;
   }
 };
+
+export const compareDates = (date: string, nextDate: string) => dayjs(nextDate).unix() - dayjs(date).unix();

@@ -1,20 +1,17 @@
 import cn from 'classnames';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getPercent } from '../../util';
-import { AppPageName, PlaceCardSize } from '../../const';
+import { AppPageName, AppRoute, PlaceCardSize, UserAuthStatus } from '../../const';
+import { useAppDispatch, useAppSelector } from '../../hooks/store';
+import { changeFavoriteOfferStatus } from '../../store/api-actions';
+import { setActivePlaceCardId } from '../../store/actions';
+import { Offer } from '../../types/offers-type';
+import { getUserAuthStatus } from '../../store/selectors';
 
 type PlaceCardProp = {
-  id: number;
+  offer: Offer;
   pageName: string;
-  price: number;
-  rating: number;
-  isFavorite: boolean;
-  isPremium: boolean;
-  previewImage: string;
-  title: string;
-  type: string;
-  onSetActiveCardId?: (id: number | null) => void;
 };
 
 type ActiveCard = {
@@ -22,21 +19,29 @@ type ActiveCard = {
   isActive: boolean;
 }
 
-const PlaceCard = ({id, pageName, price, rating, isPremium, isFavorite, previewImage, title, type, onSetActiveCardId }: PlaceCardProp): JSX.Element => {
+const PlaceCard = ({offer, pageName }: PlaceCardProp): JSX.Element => {
+  const {id, price, rating, isPremium, isFavorite, previewImage, title, type} = offer;
   const [{isActive}, setActive] = useState<ActiveCard>({id, isActive: false});
+  const dispatch = useAppDispatch();
+  const userStaus = useAppSelector(getUserAuthStatus);
+  const navigate = useNavigate();
 
-  const handleMouseEventEnter = () => {
+  const onMouseEventEnterHandle = () => {
     setActive({id, isActive: true});
-    if (onSetActiveCardId) {
-      onSetActiveCardId(id);
-    }
+    dispatch(setActivePlaceCardId(id));
   };
 
-  const handleMouseEventLeave = () => {
+  const onMouseEventLeaveHandler = () => {
     setActive({id, isActive: false});
-    if (onSetActiveCardId) {
-      onSetActiveCardId(null);
+    dispatch(setActivePlaceCardId(0));
+  };
+
+  const onClickFavoriteHandler = () => {
+    if (userStaus === UserAuthStatus.Auth) {
+      dispatch(changeFavoriteOfferStatus(offer));
+      return;
     }
+    navigate(AppRoute.Login);
   };
 
   return (
@@ -46,8 +51,8 @@ const PlaceCard = ({id, pageName, price, rating, isPremium, isFavorite, previewI
         {'cities__card': pageName === AppPageName.Main},
         {'favorites__card': pageName === AppPageName.Favorites},
         {'near-places__card': pageName === AppPageName.Room})}
-      onMouseEnter={handleMouseEventEnter}
-      onMouseLeave={handleMouseEventLeave}
+      onMouseEnter={onMouseEventEnterHandle}
+      onMouseLeave={onMouseEventLeaveHandler}
       style={isActive ? { opacity: '0.6'} : { opacity: '1' }}
     >
       {isPremium
@@ -78,7 +83,16 @@ const PlaceCard = ({id, pageName, price, rating, isPremium, isFavorite, previewI
             <b className="place-card__price-value">&euro;{price}</b>
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
-          <button className={`place-card__bookmark-button ${isFavorite ? 'place-card__bookmark-button--active' : ''} button`} type="button">
+          <button className={
+            cn(
+              'place-card__bookmark-button',
+              'button',
+              {'place-card__bookmark-button--active': isFavorite}
+            )
+          }
+          type="button"
+          onClick={onClickFavoriteHandler}
+          >
             <svg className="place-card__bookmark-icon" width="18" height="19">
               <use xlinkHref="#icon-bookmark"></use>
             </svg>

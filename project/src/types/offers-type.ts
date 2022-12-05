@@ -34,3 +34,4 @@ export type Offer = {
   title: string;
   type: string;
 };
+

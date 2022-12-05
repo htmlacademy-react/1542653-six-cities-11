@@ -11,7 +11,7 @@ type MapProp = {
     locations: Location;
     id: number;
   }[];
-  selectedPlaceId: number | null;
+  selectedPlaceId: number;
   isMainPage: boolean;
 }
 

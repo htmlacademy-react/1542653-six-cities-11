@@ -1,4 +1,4 @@
-import './city-places-list-error.css';
+import './city-places-error.css';
 
 const CityPlaceListError = (): JSX.Element => (
   <div className="cities__places-container cities__places-container--error container">
