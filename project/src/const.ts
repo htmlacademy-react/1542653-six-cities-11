@@ -9,7 +9,6 @@ const Limits = {
   ErrorDeleteTimeout: 5000,
 };
 
-
 enum AppRoute {
   Main = '/',
   Login = '/login',
@@ -75,6 +74,11 @@ enum ServerResponseActions {
   Loading = 'loading'
 }
 
+enum NameSpaces {
+  User = 'USER',
+  Offer = 'OFFER'
+}
+
 export {
   DEFAULT_CITY,
   CITIES,
@@ -88,5 +92,6 @@ export {
   PlaceCardSize,
   APIRoutes,
   ServerResponseActions,
-  Limits
+  Limits,
+  NameSpaces
 };

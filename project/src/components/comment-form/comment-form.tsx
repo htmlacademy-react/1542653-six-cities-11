@@ -6,7 +6,6 @@ import CommentErrorMessage from '../comment-error-message/comment-error-message'
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { sendComment } from '../../store/api-actions';
 import { getCommentErrorStatus, getCommentStatus } from '../../store/selectors';
-// import { setCreationCommentErrorStatus } from '../../store/actions';
 import { Limits } from '../../const';
 import cn from 'classnames';
 import './comment-form.css';

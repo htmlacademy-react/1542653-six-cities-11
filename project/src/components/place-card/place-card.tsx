@@ -19,24 +19,24 @@ type ActiveCard = {
   isActive: boolean;
 }
 
-const PlaceCard = ({offer, pageName }: PlaceCardProp): JSX.Element => {
-  const {id, price, rating, isPremium, isFavorite, previewImage, title, type} = offer;
-  const [{isActive}, setActive] = useState<ActiveCard>({id, isActive: false});
+const PlaceCard = ({ offer, pageName }: PlaceCardProp): JSX.Element => {
+  const { id, price, rating, isPremium, isFavorite, previewImage, title, type } = offer;
+  const [{ isActive }, setActive] = useState<ActiveCard>({ id, isActive: false });
   const dispatch = useAppDispatch();
   const userStaus = useAppSelector(getUserAuthStatus);
   const navigate = useNavigate();
 
-  const onMouseEventEnterHandle = () => {
-    setActive({id, isActive: true});
+  const handleCardMouseEventEnter = () => {
+    setActive({ id, isActive: true });
     dispatch(setActivePlaceCardId(id));
   };
 
-  const onMouseEventLeaveHandler = () => {
-    setActive({id, isActive: false});
+  const handleCardMouseEventLeave = () => {
+    setActive({ id, isActive: false });
     dispatch(setActivePlaceCardId(0));
   };
 
-  const onClickFavoriteHandler = () => {
+  const handleFavoriteButtonClick = () => {
     if (userStaus === UserAuthStatus.Auth) {
       dispatch(changeFavoriteOfferStatus(offer));
       return;
@@ -48,12 +48,12 @@ const PlaceCard = ({offer, pageName }: PlaceCardProp): JSX.Element => {
     <article
       className={cn(
         'place-card',
-        {'cities__card': pageName === AppPageName.Main},
-        {'favorites__card': pageName === AppPageName.Favorites},
-        {'near-places__card': pageName === AppPageName.Room})}
-      onMouseEnter={onMouseEventEnterHandle}
-      onMouseLeave={onMouseEventLeaveHandler}
-      style={isActive ? { opacity: '0.6'} : { opacity: '1' }}
+        { 'cities__card': pageName === AppPageName.Main },
+        { 'favorites__card': pageName === AppPageName.Favorites },
+        { 'near-places__card': pageName === AppPageName.Room })}
+      onMouseEnter={handleCardMouseEventEnter}
+      onMouseLeave={handleCardMouseEventLeave}
+      style={isActive ? { opacity: '0.6' } : { opacity: '1' }}
     >
       {isPremium
         ?
@@ -63,9 +63,9 @@ const PlaceCard = ({offer, pageName }: PlaceCardProp): JSX.Element => {
         : isPremium}
       <div className={cn(
         'place-card__image-wrapper',
-        {'cities__image-wrapper': pageName === AppPageName.Main},
-        {'favorites__image-wrapper': pageName === AppPageName.Favorites},
-        {'near-places__image-wrapper': pageName === AppPageName.Room})}
+        { 'cities__image-wrapper': pageName === AppPageName.Main },
+        { 'favorites__image-wrapper': pageName === AppPageName.Favorites },
+        { 'near-places__image-wrapper': pageName === AppPageName.Room })}
       >
         <Link to={`/offer/${id}`}>
           <img
@@ -87,11 +87,11 @@ const PlaceCard = ({offer, pageName }: PlaceCardProp): JSX.Element => {
             cn(
               'place-card__bookmark-button',
               'button',
-              {'place-card__bookmark-button--active': isFavorite}
+              { 'place-card__bookmark-button--active': isFavorite }
             )
           }
           type="button"
-          onClick={onClickFavoriteHandler}
+          onClick={handleFavoriteButtonClick}
           >
             <svg className="place-card__bookmark-icon" width="18" height="19">
               <use xlinkHref="#icon-bookmark"></use>
