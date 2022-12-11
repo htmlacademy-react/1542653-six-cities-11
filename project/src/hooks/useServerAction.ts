@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAppSelector } from './store';
-import { getOfferLoadedStatus, getOfferLoadingErrorStatus } from '../store/selectors';
+import { getOfferLoadedStatus, getOfferLoadingErrorStatus } from '../store/offers-process/selectors';
 import { ServerResponseActions } from '../const';
 import { Offer } from '../types/offers-type';
 
@@ -10,21 +10,26 @@ const useServerActions = (offers: Offer[]) => {
   const isError = useAppSelector(getOfferLoadingErrorStatus);
 
   useEffect(() => {
-    if (!offers.length && isLoaded) {
+    let isComponentMounted = true;
+    if (isComponentMounted && !offers.length && isLoaded) {
       setAction(ServerResponseActions.NoContent);
     }
 
-    if (!offers.length && !isLoaded && !isError) {
+    if (isComponentMounted && !offers.length && !isLoaded && !isError) {
       setAction(ServerResponseActions.Loading);
     }
 
-    if (offers.length > 0 && isLoaded) {
+    if (isComponentMounted && offers.length > 0 && isLoaded) {
       setAction(ServerResponseActions.Ready);
     }
 
-    if (isError && !isLoaded) {
+    if (isComponentMounted && isError && !isLoaded) {
       setAction(ServerResponseActions.Error);
     }
+
+    return () => {
+      isComponentMounted = false;
+    };
 
   }, [isError, isLoaded, offers]);
 

@@ -10,12 +10,12 @@ const AuthForm = (): JSX.Element => {
     password: ''
   });
 
-  const onFieldChangeHandler = (evt: ChangeEvent<HTMLInputElement>) => setAuthForm({
+  const handleFieldFormChange = (evt: ChangeEvent<HTMLInputElement>) => setAuthForm({
     ...authForm,
     [evt.target.name]: evt.target.value
   });
 
-  const onSubmitHandler = (evt: FormEvent) => {
+  const handleFormSubmit = (evt: FormEvent) => {
     evt.preventDefault();
     dispatch(login(authForm));
   };
@@ -23,11 +23,11 @@ const AuthForm = (): JSX.Element => {
   const isSubmitButtonDisabled = ():boolean => Object.values(authForm).some((value) => !value);
 
   return (
-    <form className="login__form form" action="#" method="post" onSubmit={onSubmitHandler}>
+    <form className="login__form form" action="#" method="post" onSubmit={handleFormSubmit}>
       <div className="login__input-wrapper form__input-wrapper">
         <label className="visually-hidden">E-mail</label>
         <input
-          onChange={onFieldChangeHandler}
+          onChange={handleFieldFormChange}
           className="login__input form__input"
           type="email"
           name="email"
@@ -38,7 +38,7 @@ const AuthForm = (): JSX.Element => {
       <div className="login__input-wrapper form__input-wrapper">
         <label className="visually-hidden">Password</label>
         <input
-          onChange={onFieldChangeHandler}
+          onChange={handleFieldFormChange}
           className="login__input form__input"
           type="password"
           name="password"

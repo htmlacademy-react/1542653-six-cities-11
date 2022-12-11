@@ -76,7 +76,9 @@ enum ServerResponseActions {
 
 enum NameSpaces {
   User = 'USER',
-  Offer = 'OFFER'
+  Offer = 'OFFER',
+  Favorite = 'FAVORITE',
+  Review = 'REVIEW',
 }
 
 export {

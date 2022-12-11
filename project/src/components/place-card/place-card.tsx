@@ -1,43 +1,37 @@
+import { memo } from 'react';
 import cn from 'classnames';
-import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { getPercent } from '../../util';
 import { AppPageName, AppRoute, PlaceCardSize, UserAuthStatus } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { changeFavoriteOfferStatus } from '../../store/api-actions';
-import { setActivePlaceCardId } from '../../store/actions';
+import { setActivePlaceCardId } from '../../store/offers-process/offer-process';
 import { Offer } from '../../types/offers-type';
-import { getUserAuthStatus } from '../../store/selectors';
+import { getUserAuthStatus } from '../../store/user-process/selectors';
 
 type PlaceCardProp = {
   offer: Offer;
   pageName: string;
+  isActive: boolean;
 };
 
-type ActiveCard = {
-  id: number;
-  isActive: boolean;
-}
 
-const PlaceCard = ({ offer, pageName }: PlaceCardProp): JSX.Element => {
+const PlaceCard = ({ offer, pageName, isActive }: PlaceCardProp): JSX.Element => {
   const { id, price, rating, isPremium, isFavorite, previewImage, title, type } = offer;
-  const [{ isActive }, setActive] = useState<ActiveCard>({ id, isActive: false });
   const dispatch = useAppDispatch();
-  const userStaus = useAppSelector(getUserAuthStatus);
+  const userStatus = useAppSelector(getUserAuthStatus);
   const navigate = useNavigate();
 
   const handleCardMouseEventEnter = () => {
-    setActive({ id, isActive: true });
     dispatch(setActivePlaceCardId(id));
   };
 
   const handleCardMouseEventLeave = () => {
-    setActive({ id, isActive: false });
     dispatch(setActivePlaceCardId(0));
   };
 
   const handleFavoriteButtonClick = () => {
-    if (userStaus === UserAuthStatus.Auth) {
+    if (userStatus === UserAuthStatus.Auth) {
       dispatch(changeFavoriteOfferStatus(offer));
       return;
     }
@@ -114,4 +108,4 @@ const PlaceCard = ({ offer, pageName }: PlaceCardProp): JSX.Element => {
   );
 };
 
-export default PlaceCard;
+export default memo(PlaceCard);

@@ -1,5 +1,5 @@
 import { useAppSelector } from '../../hooks/store';
-import { getCurrentCity } from '../../store/selectors';
+import { getCurrentCity } from '../../store/offers-process/selectors';
 
 const CityPlaceListEmpty = (): JSX.Element => {
   const currentCity = useAppSelector(getCurrentCity);

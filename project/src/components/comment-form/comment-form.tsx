@@ -1,11 +1,12 @@
 import { useParams } from 'react-router-dom';
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState, useCallback } from 'react';
 import CommentPlaceRating from '../comment-place-rating/comment-place-rating';
 import CommentHelp from '../comment-help/comment-help';
 import CommentErrorMessage from '../comment-error-message/comment-error-message';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { sendComment } from '../../store/api-actions';
-import { getCommentErrorStatus, getCommentStatus } from '../../store/selectors';
+import { getCommentErrorStatus, getCommentStatus } from '../../store/review-process/selectors';
+import { removeCommentError } from '../../store/review-process/review-process';
 import { Limits } from '../../const';
 import cn from 'classnames';
 import './comment-form.css';
@@ -20,11 +21,14 @@ const CommentForm = (): JSX.Element => {
   const queryParam = useParams();
   const id = Number(queryParam.id);
 
-  const changeTextCommentHandler = (evt: ChangeEvent<HTMLTextAreaElement>) => setCommentText(evt.target.value);
+  const handleTextCommentChange = (evt: ChangeEvent<HTMLTextAreaElement>) => setCommentText(evt.target.value);
 
-  const changeRating = (evt: ChangeEvent<HTMLInputElement>) => setRating(Number(evt.target.value));
+  const handleRatingChange = useCallback((evt: ChangeEvent<HTMLInputElement>) => {
+    setRating(Number(evt.target.value));
+  }, []);
 
-  const onSubmitHandler = (evt: FormEvent) => {
+
+  const handleFormCommentSubmit = (evt: FormEvent) => {
     evt.preventDefault();
     setFormStatus(true);
     dispatch(sendComment({
@@ -35,25 +39,32 @@ const CommentForm = (): JSX.Element => {
   };
 
   useEffect(() => {
-    if (isFormDisabled && commentErrorStatus) {
+    let isComponentMounted = true;
+    if (isComponentMounted && isFormDisabled && commentErrorStatus) {
       setFormStatus(false);
+      setTimeout(() => {
+        dispatch(removeCommentError());
+      }, Limits.ErrorDeleteTimeout);
     }
 
-    if (isFormDisabled && !commentErrorStatus && isCommentSent) {
+    if (isComponentMounted && isFormDisabled && !commentErrorStatus && isCommentSent) {
       setFormStatus(false);
       setRating(0);
       setCommentText('');
     }
-  }, [isFormDisabled, commentErrorStatus, isCommentSent]);
+    return () => {
+      isComponentMounted = false;
+    };
+  }, [isFormDisabled, commentErrorStatus, isCommentSent, dispatch]);
 
   return (
-    <form className="reviews__form form" action="#" method="post" onSubmit={onSubmitHandler}>
+    <form className="reviews__form form" action="#" method="post" onSubmit={handleFormCommentSubmit}>
       <label className="reviews__label form__label" htmlFor="review">Your review</label>
 
-      <CommentPlaceRating currentRating={rating} onChangeRatingHandler={changeRating} isDisabled={isFormDisabled} />
+      <CommentPlaceRating currentRating={rating} onChangeRatingHandler={handleRatingChange} isDisabled={isFormDisabled} />
 
       <textarea
-        onChange={changeTextCommentHandler}
+        onChange={handleTextCommentChange}
         value={commentText}
         className={cn(
           'reviews__textarea form__textarea',

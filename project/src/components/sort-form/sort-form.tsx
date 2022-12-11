@@ -1,21 +1,22 @@
+import { memo } from 'react';
 import cn from 'classnames';
 import { useState } from 'react';
 import { SortType } from '../../const';
 import { useAppSelector } from '../../hooks/store';
 import SortOption from '../sort-options/sort-options';
-import { getCurrentSort } from '../../store/selectors';
+import { getCurrentSort } from '../../store/offers-process/selectors';
 
 
 const SortForm = (): JSX.Element => {
   const currentSortType = useAppSelector(getCurrentSort);
   const [isSortListOpen, setSortListStatus] = useState(false);
 
-  const clickSortListHandler = () => setSortListStatus(!isSortListOpen);
+  const handleSortListClick = () => setSortListStatus(!isSortListOpen);
 
   return (
     <form className="places__sorting" action="#" method="get">
       <span className="places__sorting-caption">Sort by</span>
-      <span className="places__sorting-type" tabIndex={0} onClick={clickSortListHandler}>
+      <span className="places__sorting-type" tabIndex={0} onClick={handleSortListClick}>
         {currentSortType}
         <svg className="places__sorting-arrow" width="7" height="4">
           <use xlinkHref="#icon-arrow-select"></use>
@@ -34,4 +35,4 @@ const SortForm = (): JSX.Element => {
   );
 };
 
-export default SortForm;
+export default memo(SortForm);
