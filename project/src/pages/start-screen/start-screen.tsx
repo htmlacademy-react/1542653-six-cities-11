@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import cn from 'classnames';
 import { Helmet } from 'react-helmet-async';
 import PageHeader from '../../components/page-header/page-header';
@@ -7,24 +8,33 @@ import CityList from '../../components/city-list/city-list';
 import SortForm from '../../components/sort-form/sort-form';
 import CityPlacesStub from '../../components/city-places-stub/city-places-stub';
 import { AppPageName, CITIES, ServerResponseActions } from '../../const';
-import { Offer } from '../../types/offers-type';
-import { useAppSelector } from '../../hooks/store';
-import { getCurrentCity, getCurrentSort, getActivePlaceCardId } from '../../store/offers-process/selectors';
+import { useAppSelector, useAppDispatch } from '../../hooks/store';
+import { getCurrentCity, getCurrentSort, getActivePlaceCardId, getFilteredOffers, getOffersLoadingStatus } from '../../store/offers-process/selectors';
 import { getSortOffer } from '../../util';
 import useServerAction from '../../hooks/useServerAction';
+import { fetchOffers } from '../../store/api-actions';
 
-type StartScreenProp = {
-  offers: Offer[];
-};
-
-const StartScreen = ({ offers }: StartScreenProp): JSX.Element => {
+const StartScreen = (): JSX.Element => {
+  const offers = useAppSelector(getFilteredOffers);
+  const isOffersLoading = useAppSelector(getOffersLoadingStatus);
   const currentCity = useAppSelector(getCurrentCity);
   const activePlaceCardId = useAppSelector(getActivePlaceCardId);
   const placeCount = offers.length;
   const currentSortType = useAppSelector(getCurrentSort);
   const location = placeCount ? {...offers[0].city.location} : null;
-  const action = useServerAction(offers);
+  const dispatch = useAppDispatch();
 
+  useEffect(() => {
+    let isComponentMounted = true;
+    if (isComponentMounted && !offers.length && !isOffersLoading) {
+      dispatch(fetchOffers());
+    }
+    return () => {
+      isComponentMounted = false;
+    };
+  }, [dispatch, offers, isOffersLoading]);
+
+  const action = useServerAction(offers);
   return (
     <div className="page page--gray page--main">
       <Helmet>

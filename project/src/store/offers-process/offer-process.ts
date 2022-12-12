@@ -8,6 +8,7 @@ const initialState: OfferProcess = {
   sortOfferType: DEFAULT_SORT_TYPE,
   activePlaceCardId: 0,
   offers: [],
+  isOffersLoading: false,
   isOfferLoaded: false,
   offerLoadingErrorStatus: false,
   currentOffer: null,
@@ -33,14 +34,16 @@ export const offerProcess = createSlice({
   extraReducers(builder) {
     builder
       .addCase(fetchOffers.pending, (state) => {
-        state.isOfferLoaded = false;
+        state.isOffersLoading = true;
       })
       .addCase(fetchOffers.fulfilled , (state, action) => {
         state.offers = action.payload;
+        state.isOffersLoading = false;
         state.isOfferLoaded = true;
       })
       .addCase(fetchOffers.rejected, (state) => {
         state.offerLoadingErrorStatus = true;
+        state.isOffersLoading = false;
       })
       .addCase(fetchOffer.fulfilled, (state, action) => {
         state.currentOffer = action.payload;
