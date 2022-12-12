@@ -1,7 +1,6 @@
 import cn from 'classnames';
 import { Helmet } from 'react-helmet-async';
 import PageHeader from '../../components/page-header/page-header';
-import PageNavigation from '../../components/page-navigation/page-navigation';
 import OfferList from '../../components/offer-list/offer-list';
 import Map from '../../components/map/map';
 import CityList from '../../components/city-list/city-list';
@@ -10,7 +9,7 @@ import CityPlacesStub from '../../components/city-places-stub/city-places-stub';
 import { AppPageName, CITIES, ServerResponseActions } from '../../const';
 import { Offer } from '../../types/offers-type';
 import { useAppSelector } from '../../hooks/store';
-import { getCurrentCity, getCurrentSort, getActivePlaceCardId } from '../../store/selectors';
+import { getCurrentCity, getCurrentSort, getActivePlaceCardId } from '../../store/offers-process/selectors';
 import { getSortOffer } from '../../util';
 import useServerAction from '../../hooks/useServerAction';
 
@@ -32,9 +31,8 @@ const StartScreen = ({ offers }: StartScreenProp): JSX.Element => {
         <title>6 cities. Main page</title>
       </Helmet>
 
-      <PageHeader>
-        <PageNavigation />
-      </PageHeader>
+      <PageHeader isNavigationShown />
+
       <main className={
         cn(
           'page__main',

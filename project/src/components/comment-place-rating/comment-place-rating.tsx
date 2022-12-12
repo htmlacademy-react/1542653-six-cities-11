@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { ChangeEvent, Fragment } from 'react';
 import { PlaceRating } from '../../const';
 
@@ -34,5 +35,5 @@ const CommentPlaceRating = ({ currentRating, onChangeRatingHandler, isDisabled }
   );
 };
 
-export default CommentPlaceRating;
+export default memo(CommentPlaceRating);
 

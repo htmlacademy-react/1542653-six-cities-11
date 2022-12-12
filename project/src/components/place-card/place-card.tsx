@@ -1,43 +1,37 @@
+import { memo } from 'react';
 import cn from 'classnames';
-import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { getPercent } from '../../util';
 import { AppPageName, AppRoute, PlaceCardSize, UserAuthStatus } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { changeFavoriteOfferStatus } from '../../store/api-actions';
-import { setActivePlaceCardId } from '../../store/actions';
+import { setActivePlaceCardId } from '../../store/offers-process/offer-process';
 import { Offer } from '../../types/offers-type';
-import { getUserAuthStatus } from '../../store/selectors';
+import { getUserAuthStatus } from '../../store/user-process/selectors';
 
 type PlaceCardProp = {
   offer: Offer;
   pageName: string;
+  isActive: boolean;
 };
 
-type ActiveCard = {
-  id: number;
-  isActive: boolean;
-}
 
-const PlaceCard = ({offer, pageName }: PlaceCardProp): JSX.Element => {
-  const {id, price, rating, isPremium, isFavorite, previewImage, title, type} = offer;
-  const [{isActive}, setActive] = useState<ActiveCard>({id, isActive: false});
+const PlaceCard = ({ offer, pageName, isActive }: PlaceCardProp): JSX.Element => {
+  const { id, price, rating, isPremium, isFavorite, previewImage, title, type } = offer;
   const dispatch = useAppDispatch();
-  const userStaus = useAppSelector(getUserAuthStatus);
+  const userStatus = useAppSelector(getUserAuthStatus);
   const navigate = useNavigate();
 
-  const onMouseEventEnterHandle = () => {
-    setActive({id, isActive: true});
+  const handleCardMouseEventEnter = () => {
     dispatch(setActivePlaceCardId(id));
   };
 
-  const onMouseEventLeaveHandler = () => {
-    setActive({id, isActive: false});
+  const handleCardMouseEventLeave = () => {
     dispatch(setActivePlaceCardId(0));
   };
 
-  const onClickFavoriteHandler = () => {
-    if (userStaus === UserAuthStatus.Auth) {
+  const handleFavoriteButtonClick = () => {
+    if (userStatus === UserAuthStatus.Auth) {
       dispatch(changeFavoriteOfferStatus(offer));
       return;
     }
@@ -48,12 +42,12 @@ const PlaceCard = ({offer, pageName }: PlaceCardProp): JSX.Element => {
     <article
       className={cn(
         'place-card',
-        {'cities__card': pageName === AppPageName.Main},
-        {'favorites__card': pageName === AppPageName.Favorites},
-        {'near-places__card': pageName === AppPageName.Room})}
-      onMouseEnter={onMouseEventEnterHandle}
-      onMouseLeave={onMouseEventLeaveHandler}
-      style={isActive ? { opacity: '0.6'} : { opacity: '1' }}
+        { 'cities__card': pageName === AppPageName.Main },
+        { 'favorites__card': pageName === AppPageName.Favorites },
+        { 'near-places__card': pageName === AppPageName.Room })}
+      onMouseEnter={handleCardMouseEventEnter}
+      onMouseLeave={handleCardMouseEventLeave}
+      style={isActive ? { opacity: '0.6' } : { opacity: '1' }}
     >
       {isPremium
         ?
@@ -63,9 +57,9 @@ const PlaceCard = ({offer, pageName }: PlaceCardProp): JSX.Element => {
         : isPremium}
       <div className={cn(
         'place-card__image-wrapper',
-        {'cities__image-wrapper': pageName === AppPageName.Main},
-        {'favorites__image-wrapper': pageName === AppPageName.Favorites},
-        {'near-places__image-wrapper': pageName === AppPageName.Room})}
+        { 'cities__image-wrapper': pageName === AppPageName.Main },
+        { 'favorites__image-wrapper': pageName === AppPageName.Favorites },
+        { 'near-places__image-wrapper': pageName === AppPageName.Room })}
       >
         <Link to={`/offer/${id}`}>
           <img
@@ -87,11 +81,11 @@ const PlaceCard = ({offer, pageName }: PlaceCardProp): JSX.Element => {
             cn(
               'place-card__bookmark-button',
               'button',
-              {'place-card__bookmark-button--active': isFavorite}
+              { 'place-card__bookmark-button--active': isFavorite }
             )
           }
           type="button"
-          onClick={onClickFavoriteHandler}
+          onClick={handleFavoriteButtonClick}
           >
             <svg className="place-card__bookmark-icon" width="18" height="19">
               <use xlinkHref="#icon-bookmark"></use>
@@ -114,4 +108,4 @@ const PlaceCard = ({offer, pageName }: PlaceCardProp): JSX.Element => {
   );
 };
 
-export default PlaceCard;
+export default memo(PlaceCard);

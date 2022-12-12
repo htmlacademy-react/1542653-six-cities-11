@@ -3,11 +3,10 @@ import { AppRoute } from '../../const';
 import { logout } from '../../store/api-actions';
 import { useAppDispatch } from '../../hooks/store';
 
-
 const SignOut = (): JSX.Element => {
   const dispatch = useAppDispatch();
 
-  const onLogoutClickHandler = () => {
+  const handleLogoutButtonClick = () => {
     dispatch(logout());
   };
 
@@ -16,7 +15,7 @@ const SignOut = (): JSX.Element => {
       <Link
         className="header__nav-link"
         to={AppRoute.Main}
-        onClick={onLogoutClickHandler}
+        onClick={handleLogoutButtonClick}
       >
         <span className="header__signout">Sign out</span>
       </Link>

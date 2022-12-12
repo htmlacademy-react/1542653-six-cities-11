@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
 import { UserAuthStatus, AppRoute } from '../../const';
 import { useAppSelector } from '../../hooks/store';
-import { getFavoriteOffers, getUser } from '../../store/selectors';
+import { getFavoriteOffers } from '../../store/favorite-offers-process/selectors';
+import { getUser } from '../../store/user-process/selectors';
 
 type SignInProp = {
   authStatus: string;

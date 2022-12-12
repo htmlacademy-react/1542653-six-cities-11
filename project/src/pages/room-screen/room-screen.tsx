@@ -3,7 +3,6 @@ import { Helmet } from 'react-helmet-async';
 import { useParams, useNavigate } from 'react-router-dom';
 import UnexistScreen from '../unexist-screen/unexist-screen';
 import PageHeader from '../../components/page-header/page-header';
-import PageNavigation from '../../components/page-navigation/page-navigation';
 import CommentForm from '../../components/comment-form/comment-form';
 import ReviewList from '../../components/review-list/review-list';
 import OfferList from '../../components/offer-list/offer-list';
@@ -14,10 +13,11 @@ import Spinner from '../../components/spinner/spinner';
 import { AppPageName, AppRoute, UserAuthStatus, Limits } from '../../const';
 import { changeFavoriteOfferStatus, fetchNearbyOffers, fetchOffer, fetchReviews } from '../../store/api-actions';
 import { useAppSelector, useAppDispatch } from '../../hooks/store';
-import { getCurrentOffer, getReviews, getNerbyOffers, getUserAuthStatus, getCurrentOfferErrorStatus } from '../../store/selectors';
-import { setCurrentOffer, setCurrentOfferError, setNearbyOffers, setReviews } from '../../store/actions';
+import { getCurrentOffer, getNerbyOffers, getCurrentOfferErrorStatus } from '../../store/offers-process/selectors';
+import { getReviews } from '../../store/review-process/selectors';
+import { getUserAuthStatus } from '../../store/user-process/selectors';
 import { getPercent, adaptAppartmentType, compareDates } from '../../util';
-import classNames from 'classnames';
+import cn from 'classnames';
 import './room-screen.css';
 
 const RoomScreen = (): JSX.Element => {
@@ -27,13 +27,15 @@ const RoomScreen = (): JSX.Element => {
 
   const currentOffer = useAppSelector(getCurrentOffer);
   const reviews = useAppSelector(getReviews);
-  const renderedRewiews = reviews ? reviews.slice(0, Limits.MaxCommentsOnPage).sort((review, nextReview) => compareDates(review.date, nextReview.date)) : [];
+  const renderedRewiews = reviews
+    ? reviews.slice(0, Limits.MaxCommentsOnPage).sort((review, nextReview) => compareDates(review.date, nextReview.date))
+    : [];
   const nearbyOffers = useAppSelector(getNerbyOffers);
   const currentUserAuthStatus = useAppSelector(getUserAuthStatus);
   const currentOfferErrorStatus = useAppSelector(getCurrentOfferErrorStatus);
   const dispatch = useAppDispatch();
 
-  const onClickFivoriteOfferHandler = () => {
+  const handleFavoriteButtonClick = () => {
     if (currentOffer && currentUserAuthStatus === UserAuthStatus.Auth) {
       dispatch(changeFavoriteOfferStatus(currentOffer));
       return;
@@ -42,14 +44,15 @@ const RoomScreen = (): JSX.Element => {
   };
 
   useEffect(() => {
-    dispatch(fetchOffer(id));
-    dispatch(fetchReviews(id));
-    dispatch(fetchNearbyOffers(id));
+    let isComponentMounted = true;
+    if (isComponentMounted) {
+      window.scrollTo(0, 0);
+      dispatch(fetchOffer(id));
+      dispatch(fetchReviews(id));
+      dispatch(fetchNearbyOffers(id));
+    }
     return () => {
-      dispatch(setCurrentOffer(null));
-      dispatch(setReviews(null));
-      dispatch(setNearbyOffers([]));
-      dispatch(setCurrentOfferError(false));
+      isComponentMounted = false;
     };
   }, [id, dispatch]);
 
@@ -63,9 +66,7 @@ const RoomScreen = (): JSX.Element => {
         <title>6 cities. Room overview</title>
       </Helmet>
 
-      <PageHeader>
-        <PageNavigation />
-      </PageHeader>
+      <PageHeader isNavigationShown />
 
       <main className="page__main page__main--property">
         <section className="property">
@@ -76,7 +77,7 @@ const RoomScreen = (): JSX.Element => {
           </div>
           <div className="property__container container">
             <div className="property__wrapper">
-              <div className="property__mark" style={!currentOffer.isPremium ? {display: 'none'} : {}}>
+              <div className="property__mark" style={!currentOffer.isPremium ? { display: 'none' } : {}}>
                 <span>Premium</span>
               </div>
               <div className="property__name-wrapper">
@@ -84,14 +85,14 @@ const RoomScreen = (): JSX.Element => {
                   {currentOffer.title}
                 </h1>
                 <button className={
-                  classNames(
+                  cn(
                     'property__bookmark-button',
                     'button',
-                    {'property__bookmark-button--active': currentOffer.isFavorite}
+                    { 'property__bookmark-button--active': currentOffer.isFavorite }
                   )
                 }
                 type="button"
-                onClick={onClickFivoriteOfferHandler}
+                onClick={handleFavoriteButtonClick}
                 >
                   <svg className="property__bookmark-icon" width="31" height="33">
                     <use xlinkHref="#icon-bookmark"></use>
@@ -132,7 +133,12 @@ const RoomScreen = (): JSX.Element => {
               <div className="property__host">
                 <h2 className="property__host-title">Meet the host</h2>
                 <div className="property__host-user user">
-                  <div className="property__avatar-wrapper property__avatar-wrapper--pro user__avatar-wrapper">
+                  <div className={cn(
+                    'property__avatar-wrapper',
+                    'user__avatar-wrapper',
+                    {'property__avatar-wrapper--pro': currentOffer.host.isPro }
+                  )}
+                  >
                     <img className="property__avatar user__avatar" src={currentOffer.host.avatarUrl} width="74" height="74" alt="Host avatar" />
                   </div>
                   <span className="property__user-name">
@@ -150,7 +156,7 @@ const RoomScreen = (): JSX.Element => {
               </div>
               <section className="property__reviews reviews">
 
-                <ReviewList reviews={renderedRewiews}/>
+                <ReviewList reviews={renderedRewiews} />
 
                 {currentUserAuthStatus === UserAuthStatus.Auth ? <CommentForm /> : undefined}
 
@@ -161,7 +167,10 @@ const RoomScreen = (): JSX.Element => {
           <Map
             isMainPage={false}
             city={currentOffer.city.location}
-            points={nearbyOffers.map((offer) => ({id: offer.id, locations: {...offer.location}}))}
+            points={[
+              ...nearbyOffers.map((offer) => ({ id: offer.id, locations: { ...offer.location } })),
+              {id: currentOffer.id, locations: {...currentOffer.location}}
+            ]}
             selectedPlaceId={currentOffer.id}
           />
 

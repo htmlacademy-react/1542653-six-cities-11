@@ -35,7 +35,7 @@ const Map = ({ city, points, selectedPlaceId, isMainPage }: MapProp): JSX.Elemen
     lat: point.locations.latitude,
     lng: point.locations.longitude,
   }, {
-    icon: selectedPlaceId === point.id && isMainPage ? pinActive : pin,
+    icon: selectedPlaceId === point.id ? pinActive : pin,
   }));
 
   const addMarkersToCard = (markers: leaflet.Marker[], mapLayer: leaflet.Map) => markers.forEach((marker) => marker.addTo(mapLayer));
@@ -43,18 +43,29 @@ const Map = ({ city, points, selectedPlaceId, isMainPage }: MapProp): JSX.Elemen
   const cleanMarkers = (markers: leaflet.Marker[]) => markers.forEach((marker) => marker.remove());
 
   useEffect(() => {
-    if (map) {
+    let isComponentMounted = true;
+    if (isComponentMounted && map) {
       addMarkersToCard(markerList, map);
       map.setView({
         lat: city.latitude,
         lng: city.longitude
       }, city.zoom);
     }
-    return () => cleanMarkers(markerList);
+    return () => {
+      cleanMarkers(markerList);
+      isComponentMounted = false;
+    };
   }, [map, markerList, city]);
 
   return (
-    <section className={cn('map', { 'cities__map': isMainPage }, { 'property__map': !isMainPage })} ref={mapRef}></section>
+    <section className={cn(
+      'map',
+      { 'cities__map': isMainPage },
+      { 'property__map': !isMainPage }
+    )}
+    ref={mapRef}
+    >
+    </section>
   );
 };
 

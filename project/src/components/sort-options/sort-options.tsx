@@ -1,6 +1,6 @@
 import cn from 'classnames';
 import { useAppDispatch } from '../../hooks/store';
-import { setSortType } from '../../store/actions';
+import { setSortType } from '../../store/offers-process/offer-process';
 
 type SortOptionProp = {
   isActive: boolean;
@@ -10,7 +10,8 @@ type SortOptionProp = {
 
 const SortOption = ({isActive, optionName, onSetListStatus}: SortOptionProp): JSX.Element => {
   const dispatch = useAppDispatch();
-  const clickSortOptionHandler = () => {
+
+  const handleSortOptionClick = () => {
     dispatch(setSortType(optionName));
     onSetListStatus(false);
   };
@@ -21,7 +22,7 @@ const SortOption = ({isActive, optionName, onSetListStatus}: SortOptionProp): JS
       {'places__option places__option--active': isActive}
     )}
     tabIndex={0}
-    onClick={clickSortOptionHandler}
+    onClick={handleSortOptionClick}
     >
       {optionName}
     </li>

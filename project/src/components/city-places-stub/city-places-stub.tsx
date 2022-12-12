@@ -1,6 +1,7 @@
 import Spinner from '../spinner/spinner';
 import CityPlacesListEmpty from '../city-places-empty/city-places-empty';
 import CityPlacesListError from '../city-places-error/city-places-error';
+import { ServerResponseActions } from '../../const';
 
 type CityPlacesStubProp = {
   action: string;
@@ -8,10 +9,10 @@ type CityPlacesStubProp = {
 
 const CityPlacesStub = ({ action }: CityPlacesStubProp): JSX.Element => {
   switch (action) {
-    case 'loading': {
+    case ServerResponseActions.Loading: {
       return <Spinner />;
     }
-    case 'error': {
+    case ServerResponseActions.Error: {
       return <CityPlacesListError />;
     }
     default: return <CityPlacesListEmpty />;
