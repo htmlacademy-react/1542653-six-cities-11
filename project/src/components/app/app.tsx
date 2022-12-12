@@ -6,22 +6,29 @@ import AuthScreen from '../../pages/auth-screen/auth-screen';
 import FavoritesScreen from '../../pages/favorites-screen/favorites-screen';
 import RoomScreen from '../../pages/room-screen/room-screen';
 import UnexistScreen from '../../pages/unexist-screen/unexist-screen';
-import PrivateRoute from '../PrivateRoute/PrivateRoute';
+import PrivateRoute from '../private-route/private-route';
 import { useAppSelector, useAppDispatch } from '../../hooks/store';
-import { getFilteredOffers, getFavoriteOffers, getUserAuthStatus} from '../../store/selectors';
+import { getFilteredOffers } from '../../store/offers-process/selectors';
+import { getFavoriteOffers } from '../../store/favorite-offers-process/selectors';
+import { getUserAuthStatus } from '../../store/user-process/selectors';
 import { useEffect } from 'react';
 import { fetchFavoriteOffers } from '../../store/api-actions';
 
-function App(): JSX.Element {
+const App = (): JSX.Element => {
   const offers = useAppSelector(getFilteredOffers);
   const favoriteOffers = useAppSelector(getFavoriteOffers);
   const userAuthStatus = useAppSelector(getUserAuthStatus);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (userAuthStatus === UserAuthStatus.Auth) {
+    let isComponentMounted = true;
+
+    if (isComponentMounted && userAuthStatus === UserAuthStatus.Auth) {
       dispatch(fetchFavoriteOffers());
     }
+    return () => {
+      isComponentMounted = false;
+    };
   }, [userAuthStatus, dispatch]);
 
   return (
@@ -42,6 +49,6 @@ function App(): JSX.Element {
       </BrowserRouter>
     </HelmetProvider>
   );
-}
+};
 
 export default App;

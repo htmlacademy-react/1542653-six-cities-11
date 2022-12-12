@@ -1,9 +1,13 @@
+import { Offer } from '../../types/offers-type';
+import { AppPageName } from '../../const';
+import OfferList from '../offer-list/offer-list';
+
 type FavoriteLocationItemProp = {
   cityName: string;
-  children: JSX.Element[];
+  favoriteOffersByCity: Offer[];
 };
 
-const FavoriteLocationItem = ({cityName, children}: FavoriteLocationItemProp): JSX.Element => (
+const FavoriteLocationItem = ({ cityName, favoriteOffersByCity }: FavoriteLocationItemProp): JSX.Element => (
   <li className="favorites__locations-items">
     <div className="favorites__locations locations locations--current">
       <div className="locations__item">
@@ -13,7 +17,7 @@ const FavoriteLocationItem = ({cityName, children}: FavoriteLocationItemProp): J
       </div>
     </div>
     <div className="favorites__places">
-      {children}
+      <OfferList offers={favoriteOffersByCity} pageName={AppPageName.Favorites} />
     </div>
   </li>
 );

@@ -1,11 +1,13 @@
+import { memo } from 'react';
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../const';
+import PageNavigation from '../page-navigation/page-navigation';
 
 type PageHeaderProp = {
-  children?: JSX.Element;
+  isNavigationShown: boolean;
 }
 
-const PageHeader = ({ children }: PageHeaderProp): JSX.Element => (
+const PageHeader = ({ isNavigationShown }: PageHeaderProp): JSX.Element => (
   <header className="header">
     <div className="container">
       <div className="header__wrapper">
@@ -14,10 +16,10 @@ const PageHeader = ({ children }: PageHeaderProp): JSX.Element => (
             <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41" />
           </Link>
         </div>
-        { children }
+        { isNavigationShown ? <PageNavigation/> : undefined }
       </div>
     </div>
   </header>
 );
 
-export default PageHeader;
+export default memo(PageHeader);

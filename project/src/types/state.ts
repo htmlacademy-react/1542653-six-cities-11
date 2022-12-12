@@ -1,4 +1,37 @@
 import store from '../store/store';
+import { User } from './user-type';
+import { Offer } from './offers-type';
+import { Review } from './reviews-type';
+
+export type UserProcess = {
+  authorizationStatus: string;
+  user: User | null;
+};
+
+export type OfferProcess = {
+  currentCity: string;
+  sortOfferType: string;
+  activePlaceCardId: number;
+  offers: Offer[];
+  isOfferLoaded: boolean;
+  offerLoadingErrorStatus: boolean;
+  currentOffer: Offer | null;
+  currentOfferError: boolean;
+  nearbyOffers: Offer[];
+};
+
+export type FavoriteOffersProcess = {
+  favorites: Offer[];
+  favoriteLoadingErrorStatus: boolean;
+  changeFavoriteOfferStatusError: boolean;
+}
+
+export type ReviewProcess = {
+  reviews: Review[];
+  reviewErrorStatus: boolean;
+  creationCommentErrorStatus: boolean;
+  isCommentSent: boolean;
+};
 
 export type State = ReturnType<typeof store.getState>
 

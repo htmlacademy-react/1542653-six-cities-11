@@ -5,7 +5,7 @@ import PageHeader from '../../components/page-header/page-header';
 import AuthForm from '../../components/auth-form/auth-form';
 import { useAppSelector } from '../../hooks/store';
 import { UserAuthStatus, AppRoute } from '../../const';
-import { getUserAuthStatus } from '../../store/selectors';
+import { getUserAuthStatus } from '../../store/user-process/selectors';
 
 const AuthScreen = (): JSX.Element => {
   const userStatus = useAppSelector(getUserAuthStatus);
@@ -23,7 +23,7 @@ const AuthScreen = (): JSX.Element => {
         <title>6 cities. Log in</title>
       </Helmet>
 
-      <PageHeader />
+      <PageHeader isNavigationShown={false} />
 
       <main className="page__main page__main--login">
         <div className="page__login-container container">

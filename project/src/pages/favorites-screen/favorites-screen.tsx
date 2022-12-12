@@ -1,7 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 import FavoriteLocationList from '../../components/favorite-location-list/favorite-location-list';
 import PageHeader from '../../components/page-header/page-header';
-import PageNavigation from '../../components/page-navigation/page-navigation';
 import FavoriteEmptyMessage from '../../components/favorites-empty-message/favorites-empty-message';
 import Footer from '../../components/footer/footer';
 import { Offer } from '../../types/offers-type';
@@ -18,9 +17,7 @@ const FavoritesScreen = ({ offers }: FavoriteScreenProp): JSX.Element => {
         <title>6 cities. Your favorite places</title>
       </Helmet>
 
-      <PageHeader>
-        <PageNavigation />
-      </PageHeader>
+      <PageHeader isNavigationShown />
 
       <main className="page__main page__main--favorites">
         <div className="page__favorites-container container">

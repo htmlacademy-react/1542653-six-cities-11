@@ -1,6 +1,6 @@
 import { UserAuthStatus } from '../../const';
 import { useAppSelector } from '../../hooks/store';
-import { getUserAuthStatus } from '../../store/selectors';
+import { getUserAuthStatus } from '../../store/user-process/selectors';
 import SignIn from '../sign-in/sign-in';
 import SignOut from '../sign-out/sign-out';
 
