@@ -7,6 +7,8 @@ export const getCurrentCity = (state: State): string => state[NameSpaces.Offer].
 
 export const getOffers = (state: State): Offer[] => state[NameSpaces.Offer].offers;
 
+export const getOffersLoadingStatus = (state: State): boolean => state[NameSpaces.Offer].isOffersLoading;
+
 export const getOfferLoadedStatus = (state: State): boolean => state[NameSpaces.Offer].isOfferLoaded;
 
 export const getCurrentOffer = (state: State) => state[NameSpaces.Offer].currentOffer;

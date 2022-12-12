@@ -13,6 +13,7 @@ export type OfferProcess = {
   sortOfferType: string;
   activePlaceCardId: number;
   offers: Offer[];
+  isOffersLoading: boolean;
   isOfferLoaded: boolean;
   offerLoadingErrorStatus: boolean;
   currentOffer: Offer | null;

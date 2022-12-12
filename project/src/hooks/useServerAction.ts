@@ -15,7 +15,7 @@ const useServerActions = (offers: Offer[]) => {
       setAction(ServerResponseActions.NoContent);
     }
 
-    if (isComponentMounted && !offers.length && !isLoaded && !isError) {
+    if (isComponentMounted && !offers.length && !isLoaded && !isError){
       setAction(ServerResponseActions.Loading);
     }
 

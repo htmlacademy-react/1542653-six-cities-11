@@ -8,14 +8,12 @@ import RoomScreen from '../../pages/room-screen/room-screen';
 import UnexistScreen from '../../pages/unexist-screen/unexist-screen';
 import PrivateRoute from '../private-route/private-route';
 import { useAppSelector, useAppDispatch } from '../../hooks/store';
-import { getFilteredOffers } from '../../store/offers-process/selectors';
 import { getFavoriteOffers } from '../../store/favorite-offers-process/selectors';
 import { getUserAuthStatus } from '../../store/user-process/selectors';
 import { useEffect } from 'react';
 import { fetchFavoriteOffers } from '../../store/api-actions';
 
 const App = (): JSX.Element => {
-  const offers = useAppSelector(getFilteredOffers);
   const favoriteOffers = useAppSelector(getFavoriteOffers);
   const userAuthStatus = useAppSelector(getUserAuthStatus);
   const dispatch = useAppDispatch();
@@ -35,7 +33,7 @@ const App = (): JSX.Element => {
     <HelmetProvider>
       <BrowserRouter>
         <Routes>
-          <Route path={AppRoute.Main} element={<StartScreen offers={offers} />} />
+          <Route path={AppRoute.Main} element={<StartScreen />} />
           <Route path={AppRoute.Login} element={<AuthScreen />} />
           <Route path={AppRoute.Favorites} element={
             <PrivateRoute userAuthStatus={userAuthStatus}>
