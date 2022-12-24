@@ -1,10 +1,13 @@
 import {offerProcess} from './offer-process';
-import {DEFAULT_CITY, DEFAULT_SORT_TYPE} from '../../const';
+import {DEFAULT_CITY, DEFAULT_SORT_TYPE, CITIES, SortType} from '../../const';
+import { setCurrentCity, setSortType, setActivePlaceCardId } from './offer-process';
+import { randomInt } from '../../util';
 
 const initialState = {
   currentCity: DEFAULT_CITY,
   sortOfferType: DEFAULT_SORT_TYPE,
   activePlaceCardId: 0,
+  activePlaceCoordinates: null,
   offers: [],
   isOffersLoading: false,
   isOfferLoaded: false,
@@ -21,5 +24,29 @@ describe('Reducer: OfferProcess', () => {
     expect(offerProcess.reducer(undefined, unknownAction))
       .toEqual(initialState);
   });
+
+  it('should have to change active city', () => {
+    CITIES.forEach((city) => {
+      expect(offerProcess.reducer(initialState, setCurrentCity(city)))
+        .toEqual({...initialState, currentCity: city});
+    });
+  });
+
+  it('should have to change type of cards sorting', () => {
+    const sortTypes = Object.values(SortType);
+    sortTypes.forEach((type) => {
+      expect(offerProcess.reducer(initialState, setSortType(type)))
+        .toEqual({...initialState, sortOfferType: type});
+    });
+  });
+
+  it('should have to change active card id', () => {
+    const randomCardIds = Array.from({length: 5}, () => randomInt(1, 100));
+    randomCardIds.forEach((id) => {
+      expect(offerProcess.reducer(initialState, setActivePlaceCardId(id)))
+        .toEqual({...initialState, activePlaceCardId: id});
+    });
+  });
+
 });
 

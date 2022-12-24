@@ -23,6 +23,8 @@ export const getOfferLoadingErrorStatus = (state: State): boolean => state[NameS
 
 export const getActivePlaceCardId = (state: State) => state[NameSpaces.Offer].activePlaceCardId;
 
+export const getActivePlaceCoordinates = (state: State) => state[NameSpaces.Offer].activePlaceCoordinates;
+
 export const getFilteredOffers = createSelector(
   [getOffers, getCurrentCity],
   (offers, targetCity) => offers.filter((offer) => offer.city.name === targetCity)

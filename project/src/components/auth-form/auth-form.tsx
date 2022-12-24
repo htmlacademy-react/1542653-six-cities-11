@@ -1,6 +1,8 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
+import AuthFormErrorMessage from '../auth-form-error-message/auth-form-error-message';
 import { useAppDispatch } from '../../hooks/store';
 import { login } from '../../store/api-actions';
+import { checkPasswordValidation } from '../../util';
 
 const AuthForm = (): JSX.Element => {
   const dispatch = useAppDispatch();
@@ -10,17 +12,28 @@ const AuthForm = (): JSX.Element => {
     password: ''
   });
 
-  const handleFieldFormChange = (evt: ChangeEvent<HTMLInputElement>) => setAuthForm({
-    ...authForm,
-    [evt.target.name]: evt.target.value
-  });
+  const [formValidStatus, setValidFormStatus] = useState(false);
+  const [incorrectField, setIncorrectField] = useState('');
+
+  const handleFieldFormChange = (evt: ChangeEvent<HTMLInputElement>) => {
+
+    if (evt.target.name === 'password') {
+      setValidFormStatus(checkPasswordValidation(evt.target.value));
+      !checkPasswordValidation(evt.target.value) && evt.target.value ? setIncorrectField(evt.target.name) : setIncorrectField('');
+    }
+
+    setAuthForm({
+      ...authForm,
+      [evt.target.name]: evt.target.value
+    });
+  };
 
   const handleFormSubmit = (evt: FormEvent) => {
     evt.preventDefault();
     dispatch(login(authForm));
   };
 
-  const isSubmitButtonDisabled = ():boolean => Object.values(authForm).some((value) => !value);
+  const isSubmitButtonDisabled = (): boolean => Object.values(authForm).some((value) => !value) || !formValidStatus;
 
   return (
     <form className="login__form form" action="#" method="post" onSubmit={handleFormSubmit}>
@@ -46,6 +59,7 @@ const AuthForm = (): JSX.Element => {
           required
         />
       </div>
+      {incorrectField ? <AuthFormErrorMessage incorrectField={incorrectField} /> : undefined}
       <button
         className="login__submit form__submit button"
         type="submit"

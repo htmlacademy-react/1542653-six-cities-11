@@ -12,6 +12,10 @@ export type OfferProcess = {
   currentCity: string;
   sortOfferType: string;
   activePlaceCardId: number;
+  activePlaceCoordinates: {
+    lat: number;
+    lng: number;
+  } | null;
   offers: Offer[];
   isOffersLoading: boolean;
   isOfferLoaded: boolean;

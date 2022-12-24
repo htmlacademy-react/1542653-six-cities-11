@@ -4,6 +4,8 @@ import { useEffect, useRef } from 'react';
 import { Location } from '../../types/offers-type';
 import useMap from '../../hooks/useMap';
 import cn from 'classnames';
+import { useAppSelector } from '../../hooks/store';
+import { getActivePlaceCoordinates } from '../../store/offers-process/selectors';
 
 type MapProp = {
   city: Location;
@@ -18,6 +20,7 @@ type MapProp = {
 const Map = ({ city, points, selectedPlaceId, isMainPage }: MapProp): JSX.Element => {
   const mapRef = useRef(null);
   const map = useMap(mapRef, city);
+  const activeCardCoordinates = useAppSelector(getActivePlaceCoordinates);
 
   const pin = leaflet.icon({
     iconUrl: 'img/pin.svg',
@@ -45,17 +48,23 @@ const Map = ({ city, points, selectedPlaceId, isMainPage }: MapProp): JSX.Elemen
   useEffect(() => {
     let isComponentMounted = true;
     if (isComponentMounted && map) {
-      addMarkersToCard(markerList, map);
-      map.setView({
+      const centerCoordinates = activeCardCoordinates && map.getZoom() > city.zoom && isMainPage ? activeCardCoordinates : {
         lat: city.latitude,
         lng: city.longitude
-      }, city.zoom);
+      };
+
+      const currentZoom = map.getZoom() !== city.zoom
+        ? map.getZoom()
+        : city.zoom;
+
+      addMarkersToCard(markerList, map);
+      map.setView(centerCoordinates, currentZoom);
     }
     return () => {
       cleanMarkers(markerList);
       isComponentMounted = false;
     };
-  }, [map, markerList, city]);
+  }, [map, markerList, city, activeCardCoordinates, isMainPage]);
 
   return (
     <section className={cn(
