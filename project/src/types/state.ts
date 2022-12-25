@@ -6,6 +6,7 @@ import { Review } from './reviews-type';
 export type UserProcess = {
   authorizationStatus: string;
   user: User | null;
+  loginErrorStatus: boolean;
 };
 
 export type OfferProcess = {

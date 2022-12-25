@@ -1,11 +1,13 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
 import AuthFormErrorMessage from '../auth-form-error-message/auth-form-error-message';
-import { useAppDispatch } from '../../hooks/store';
+import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { login } from '../../store/api-actions';
 import { checkPasswordValidation } from '../../util';
+import { getLoginErrorStatus } from '../../store/user-process/selectors';
 
 const AuthForm = (): JSX.Element => {
   const dispatch = useAppDispatch();
+  const loginErrorStatus = useAppSelector(getLoginErrorStatus);
 
   const [authForm, setAuthForm] = useState({
     email: '',
@@ -34,6 +36,10 @@ const AuthForm = (): JSX.Element => {
   };
 
   const isSubmitButtonDisabled = (): boolean => Object.values(authForm).some((value) => !value) || !formValidStatus;
+
+  if (loginErrorStatus && !incorrectField) {
+    setIncorrectField('email');
+  }
 
   return (
     <form className="login__form form" action="#" method="post" onSubmit={handleFormSubmit}>

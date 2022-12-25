@@ -11,7 +11,7 @@ export const adaptAppartmentType = (type: string) => `${type[0].toUpperCase() + 
 
 export const getHuminizeDate = (date: string): string => dayjs(date).format('MMMM YYYY');
 
-export const getMachineDate = (date: string): string =>dayjs(date).format('YYYY-MM-DD');
+export const getMachineDate = (date: string): string => dayjs(date).format('YYYY-MM-DD');
 
 export const getSortOffer = (type: string, offers: Offer[]) => {
   switch (type) {
