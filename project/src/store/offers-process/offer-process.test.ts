@@ -1,6 +1,7 @@
+import faker from 'faker';
 import {offerProcess} from './offer-process';
 import {DEFAULT_CITY, DEFAULT_SORT_TYPE, CITIES, SortType} from '../../const';
-import { setCurrentCity, setSortType, setActivePlaceCardId } from './offer-process';
+import { setCurrentCity, setSortType, setActivePlaceCardId, setActivePlaceCoordinates } from './offer-process';
 import { randomInt } from '../../util';
 
 const initialState = {
@@ -18,6 +19,11 @@ const initialState = {
 };
 
 const unknownAction = {type: 'UNKNOWN_ACTION'};
+
+const getRandomCoordinates = () => ({
+  lng: Number(faker.address.longitude()),
+  lat: Number(faker.address.latitude())
+});
 
 describe('Reducer: OfferProcess', () => {
   it('unknown action should have return initial state', () => {
@@ -45,6 +51,14 @@ describe('Reducer: OfferProcess', () => {
     randomCardIds.forEach((id) => {
       expect(offerProcess.reducer(initialState, setActivePlaceCardId(id)))
         .toEqual({...initialState, activePlaceCardId: id});
+    });
+  });
+
+  it('should have to change coordinates', () => {
+    const coordinates = Array.from({length: 5}, () => getRandomCoordinates());
+    coordinates.forEach((item) => {
+      expect(offerProcess.reducer(initialState, setActivePlaceCoordinates(item)))
+        .toEqual({...initialState, activePlaceCoordinates: item});
     });
   });
 
