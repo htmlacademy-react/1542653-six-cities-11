@@ -4,6 +4,8 @@ import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { login } from '../../store/api-actions';
 import { checkPasswordValidation } from '../../util';
 import { getLoginErrorStatus } from '../../store/user-process/selectors';
+import { setLoginError } from '../../store/user-process/user-process';
+import { Limits } from '../../const';
 
 const AuthForm = (): JSX.Element => {
   const dispatch = useAppDispatch();
@@ -39,6 +41,10 @@ const AuthForm = (): JSX.Element => {
 
   if (loginErrorStatus && !incorrectField) {
     setIncorrectField('email');
+    setTimeout(() => {
+      dispatch(setLoginError(false));
+      setIncorrectField('');
+    }, Limits.ErrorDeleteTimeout);
   }
 
   return (

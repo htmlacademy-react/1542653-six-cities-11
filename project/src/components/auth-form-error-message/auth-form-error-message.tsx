@@ -8,7 +8,7 @@ const AuthFormErrorMessage = ({ incorrectField }: AuthFormErrorMessageProp) => (
   <p className="login__form-error-message">
     {incorrectField === 'password'
       ? 'The password invalid. The password should have 1 letter and 1 number'
-      : 'incorrectEmail'}
+      : 'Sorry, we couldn\'t authorized you by this email, possibly your email is not correct, please check it and try again'}
   </p>
 );
 

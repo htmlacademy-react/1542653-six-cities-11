@@ -41,3 +41,5 @@ export const userProcess = createSlice({
       });
   }
 });
+
+export const { setLoginError } = userProcess.actions;

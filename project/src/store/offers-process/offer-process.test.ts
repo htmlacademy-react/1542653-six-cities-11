@@ -1,7 +1,6 @@
-import faker from 'faker';
-import {offerProcess} from './offer-process';
-import {DEFAULT_CITY, DEFAULT_SORT_TYPE, CITIES, SortType} from '../../const';
-import { setCurrentCity, setSortType, setActivePlaceCardId, setActivePlaceCoordinates } from './offer-process';
+import { getRandomCoordinates } from '../../mock';
+import { UNKNOWN_ACTION, DEFAULT_CITY, DEFAULT_SORT_TYPE, CITIES, SortType } from '../../const';
+import { offerProcess, setCurrentCity, setSortType, setActivePlaceCardId, setActivePlaceCoordinates } from './offer-process';
 import { randomInt } from '../../util';
 
 const initialState = {
@@ -18,12 +17,7 @@ const initialState = {
   nearbyOffers: [],
 };
 
-const unknownAction = {type: 'UNKNOWN_ACTION'};
-
-const getRandomCoordinates = () => ({
-  lng: Number(faker.address.longitude()),
-  lat: Number(faker.address.latitude())
-});
+const unknownAction = {type: UNKNOWN_ACTION};
 
 describe('Reducer: OfferProcess', () => {
   it('unknown action should have return initial state', () => {
