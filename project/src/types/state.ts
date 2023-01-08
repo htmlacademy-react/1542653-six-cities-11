@@ -6,12 +6,17 @@ import { Review } from './reviews-type';
 export type UserProcess = {
   authorizationStatus: string;
   user: User | null;
+  loginErrorStatus: boolean;
 };
 
 export type OfferProcess = {
   currentCity: string;
   sortOfferType: string;
   activePlaceCardId: number;
+  activePlaceCoordinates: {
+    lat: number;
+    lng: number;
+  } | null;
   offers: Offer[];
   isOffersLoading: boolean;
   isOfferLoaded: boolean;

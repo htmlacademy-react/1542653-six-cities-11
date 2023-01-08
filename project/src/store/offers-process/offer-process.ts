@@ -7,6 +7,7 @@ const initialState: OfferProcess = {
   currentCity: DEFAULT_CITY,
   sortOfferType: DEFAULT_SORT_TYPE,
   activePlaceCardId: 0,
+  activePlaceCoordinates: null,
   offers: [],
   isOffersLoading: false,
   isOfferLoaded: false,
@@ -28,8 +29,10 @@ export const offerProcess = createSlice({
     },
     setActivePlaceCardId: (state, action: PayloadAction<number>) => {
       state.activePlaceCardId = action.payload;
+    },
+    setActivePlaceCoordinates: (state, action: PayloadAction<{ lat: number; lng: number } | null>) => {
+      state.activePlaceCoordinates = action.payload;
     }
-
   },
   extraReducers(builder) {
     builder
@@ -64,4 +67,4 @@ export const offerProcess = createSlice({
   }
 });
 
-export const {setCurrentCity, setSortType, setActivePlaceCardId} = offerProcess.actions;
+export const {setCurrentCity, setSortType, setActivePlaceCardId, setActivePlaceCoordinates} = offerProcess.actions;

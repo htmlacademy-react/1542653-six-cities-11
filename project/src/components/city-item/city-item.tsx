@@ -1,7 +1,7 @@
 import cn from 'classnames';
 import { SyntheticEvent } from 'react';
 import { useAppDispatch } from '../../hooks/store';
-import { setCurrentCity } from '../../store/offers-process/offer-process';
+import { setCurrentCity, setActivePlaceCoordinates } from '../../store/offers-process/offer-process';
 
 type CityItemProp = {
   cityName: string;
@@ -14,6 +14,7 @@ const CityItem = ({cityName, activeCity}: CityItemProp): JSX.Element => {
   const handleCityItemClick = (evt: SyntheticEvent) => {
     evt.preventDefault();
     dispatch(setCurrentCity(cityName));
+    dispatch(setActivePlaceCoordinates(null));
   };
 
   return (

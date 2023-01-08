@@ -5,7 +5,7 @@ import { getPercent } from '../../util';
 import { AppPageName, AppRoute, PlaceCardSize, UserAuthStatus } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks/store';
 import { changeFavoriteOfferStatus } from '../../store/api-actions';
-import { setActivePlaceCardId } from '../../store/offers-process/offer-process';
+import { setActivePlaceCardId, setActivePlaceCoordinates } from '../../store/offers-process/offer-process';
 import { Offer } from '../../types/offers-type';
 import { getUserAuthStatus } from '../../store/user-process/selectors';
 
@@ -17,13 +17,17 @@ type PlaceCardProp = {
 
 
 const PlaceCard = ({ offer, pageName, isActive }: PlaceCardProp): JSX.Element => {
-  const { id, price, rating, isPremium, isFavorite, previewImage, title, type } = offer;
+  const { id, price, rating, isPremium, isFavorite, previewImage, title, type, location } = offer;
   const dispatch = useAppDispatch();
   const userStatus = useAppSelector(getUserAuthStatus);
   const navigate = useNavigate();
 
   const handleCardMouseEventEnter = () => {
     dispatch(setActivePlaceCardId(id));
+    dispatch(setActivePlaceCoordinates({
+      lat: location.latitude,
+      lng: location.longitude,
+    }));
   };
 
   const handleCardMouseEventLeave = () => {

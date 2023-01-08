@@ -81,11 +81,14 @@ enum NameSpaces {
   Review = 'REVIEW',
 }
 
+const UNKNOWN_ACTION = 'UNKNOWN_ACTION';
+
 export {
   DEFAULT_CITY,
   CITIES,
   DEFAULT_SORT_TYPE,
   SERVER_URL,
+  UNKNOWN_ACTION,
   SortType,
   AppRoute,
   UserAuthStatus,
